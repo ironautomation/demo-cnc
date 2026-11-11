@@ -26,6 +26,7 @@ src/PLC/                 Automation Studio project (DemoCNC.apj)
   Logical/Libraries      vendored B&R libraries - do not edit
   Physical/Config1       hardware, I/O mapping, task layout (Cpu.sw), mapp Motion configs
 src/HMI                  IronHMI project (landscape 1920×1080) - the screen used in the videos
+src/HMI_Vertical         IronHMI project (portrait 1080×1920) - same tags, controls and 3D model, other layout
 gcode/                   test CNC programs
 episodes/NN-*/           per-video material (README per episode, examples, samples)
 docs/                    build-cli.md
@@ -59,7 +60,7 @@ Adding a new program needs both a `Package.pkg` entry under `Logical/` and a tas
 
 ## HMI
 
-The IronHMI project `src/HMI` (landscape 1920×1080) runs on the IronHMI runtime and talks to the PLC over OPC UA (`project.manifest.json`, default `opc.tcp://127.0.0.1:4840` for ARsim on the same PC; node keys `::AsGlobalPV:<path>` and `::RingBuffer:<var>`). `Controls/*.dll` and `Plugins/*` are prebuilt; `Database/` and `Logs/` are created by the runtime and gitignored. `Models/cnc_gantry.glb` is the 3D twin of the gantry.
+The IronHMI projects `src/HMI` (landscape 1920×1080) and `src/HMI_Vertical` (portrait 1080×1920) run on the IronHMI runtime and talks to the PLC over OPC UA (`project.manifest.json`, default `opc.tcp://127.0.0.1:4840` for ARsim on the same PC; node keys `::AsGlobalPV:<path>` and `::RingBuffer:<var>`). Both use the same PLC tags; `Controls/*.dll`, `Plugins/*` and `Models/` are the same prebuilt files in both folders (change them in both); `Database/` and `Logs/` are created by the runtime and gitignored. `Models/cnc_gantry.glb` is the 3D twin of the gantry.
 
 ## Naming (이름 규칙)
 

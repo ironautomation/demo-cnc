@@ -61,9 +61,9 @@
     <cnc:GuiClickLogger ScreenName="Config" LogFolder="Logs\Event" />
     <TextBlock Canvas.Left="12" Canvas.Top="10" Style="{StaticResource PageTitle}" Text="구성설정" />
 
-    <!-- ===== 탭 [위치 · 속도] (체크리스트 4-0) — ConfigTabBar 가 x:Name 으로 보이고 숨긴다. 콘텐츠는 왼쪽 탭 오른쪽 204..1764(폭 1560) 전체 ===== -->
+    <!-- ===== 탭 [위치 · 속도] — ConfigTabBar 가 x:Name 으로 보이고 숨긴다. 콘텐츠는 왼쪽 탭 오른쪽 204..1764(폭 1560) 전체 ===== -->
     <Canvas x:Name="TabPosition" Canvas.Left="0" Canvas.Top="0" Width="1776" Height="1080">
-    <!-- 지정 위치 — 이름·개수(최대 4)는 장비 설정 Config\Machine.xml(현장마다), 값(mm)은 Config\TeachPositions.xml(체크리스트 4-4) -->
+    <!-- 지정 위치 — 이름·개수(최대 4)는 장비 설정 Config\Machine.xml(현장마다), 값(mm)은 Config\TeachPositions.xml -->
     <cnc:TeachPositionEditor Canvas.Left="204" Canvas.Top="12" Width="1560" Height="468" access:Access.Level="5" MachineFile="Config\Machine.xml" TeachFile="Config\TeachPositions.xml" AxisLimits="X:-5:450;Y:-5:430;Z:-5:145" RowHeight="72" />
 
     <!-- ===== 속도 (왼쪽) · 축 소프트 리밋 (가운데) · 공작물 영점 (오른쪽) — 상자 72 높이, 줄 간격 96 ===== -->
@@ -97,7 +97,7 @@
     <cnc:PluginScreen Canvas.Left="204" Canvas.Top="12" Width="1560" Height="1056" opc:OpcUaNode.ConnectionId="cnc-plc" HeadsFile="Config\Heads.xml" UsageFile="Database\HeadUsage.xml" LayoutFile="Config\PluginLayout.xml" GCodeConfigFile="Config\GCode.xml" CncFolderFile="Config\CncFolder.xml" AccessLevel="10" CurrentActionTag="::AsGlobalPV:gEquipment.Output.Status.CurrentAction" MovingTag="::AsGlobalPV:gEquipment.Output.State.Move" ProgramNameTag="::AsGlobalPV:gEquipment.Input.Parameter.sProgramName" />
     </Canvas>
 
-    <!-- ===== 탭 [시스템] (체크리스트 4-4) — 장비 이름 기본 「범용 CNC」 ===== -->
+    <!-- ===== 탭 [시스템] — 장비 이름 기본 「범용 CNC」 ===== -->
     <Canvas x:Name="TabSystem" Canvas.Left="0" Canvas.Top="0" Width="1776" Height="1080" Visibility="Collapsed">
     <cnc:SystemSetupCard Canvas.Left="204" Canvas.Top="12" Width="1560" Height="430" access:Access.Level="5" MachineFile="Config\Machine.xml" HeadsFile="Config\Heads.xml" AlarmsFile="alarms.json" Columns="3" InfoColumns="2" />
     <cnc:MaintenanceCard Canvas.Left="204" Canvas.Top="454" Width="1560" Height="136" opc:OpcUaNode.ConnectionId="cnc-plc" AccessLevel="10" CurrentActionTag="::AsGlobalPV:gEquipment.Output.Status.CurrentAction" MovingTag="::AsGlobalPV:gEquipment.Output.State.Move" />

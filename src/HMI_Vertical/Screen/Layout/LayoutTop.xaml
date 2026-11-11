@@ -1,0 +1,248 @@
+<Canvas
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:opc="clr-namespace:IronHMI.OpcUaBridge;assembly=IronHMI.OpcUaBridge"
+    xmlns:action="clr-namespace:IronHMI.Actions;assembly=IronHMI.Common"
+    xmlns:access="clr-namespace:IronHMI.Controls.Abstractions;assembly=IronHMI.Controls.Abstractions"
+    xmlns:ironControls="clr-namespace:IronControls;assembly=IronControls"
+    xmlns:cnc="clr-namespace:CncControls;assembly=CncControls"
+    Width="1080"
+    Height="200"
+    Background="{DynamicResource Surface1}">
+    <!-- 헤더(64) + 화면 네비 세그먼트 트랙(88).
+         네비: 회색 트랙 하나 안에 5칸, 선택 칸만 흰 알약으로 떠오른다. 칸 사이 틈 없이 트랙 전체가 누르는 자리.
+         터치 패널 전제라 hover 효과는 두지 않는다(손가락이 떠난 뒤에도 hover 가 남는다). 눌림 = 살짝 축소. -->
+
+    <Canvas.Resources>
+        <!-- 네비 칸. 아이콘 선 색은 Button.Tag 로 받는다 — 선택 시 트리거가 Tag 를 브랜드 색으로 바꾼다. -->
+        <Style x:Key="SegTab" TargetType="Button">
+            <Setter Property="FontFamily" Value="{DynamicResource UiFont}" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Foreground" Value="{DynamicResource Fg2}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Tag" Value="{DynamicResource Fg3}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="SegBody" Background="{TemplateBinding Background}" CornerRadius="13">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="action:HmiNavigation.IsTargetActive" Value="True">
+                                <Setter TargetName="SegBody" Property="Background" Value="{DynamicResource Bg}" />
+                                <Setter TargetName="SegBody" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect BlurRadius="12" ShadowDepth="2" Direction="270"
+                                                          Color="#0B1220" Opacity="0.12" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Foreground" Value="{DynamicResource Fg1}" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="Tag" Value="{DynamicResource BrandPressed}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.97" ScaleY="0.97" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SegLabel" TargetType="TextBlock">
+            <Setter Property="Margin" Value="10,0,0,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <!-- 프로그램 종료 버튼 — 로그인 버튼과 같은 외곽선 골격(Bg · BorderStrong 1px · 반경 8).
+             빨강 채움은 정지 버튼과 헷갈리므로 글자·아이콘만 DangerFg. 눌림 = 밝기 단계(로그인 버튼과 동일). -->
+        <Style x:Key="ExitBtn" TargetType="Button">
+            <Setter Property="Background" Value="{DynamicResource Bg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderStrong}" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ExitFace" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="ExitFace" Property="Opacity" Value="0.82" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="ExitFace" Property="Opacity" Value="0.45" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Canvas.Resources>
+
+    <!-- ===== 헤더: 장비 · 운전 상태 · 시각 · 알람 · 사용자 · 종료 ===== -->
+    <!-- IRON AUTOMATION 로고(Images/IronLogo.png, 1280×436) — 높이 40 에 맞춰 폭 118. 그 오른쪽에 장비명 -->
+    <Image Canvas.Left="24" Canvas.Top="36" Width="118" Height="40" Stretch="Uniform"
+           Source="Images/IronLogo.png" />
+    <!-- 장비 이름 두 줄 — Config\Machine.xml 의 이름(기본 「범용 CNC」) · Config\Heads.xml 의 장착 헤드. 구성설정 [시스템]·[헤드 · 좌표계] 탭에서 바꾼다 -->
+    <cnc:MachineTitle Canvas.Left="154" Canvas.Top="34" Width="118" Height="44" NameSize="16" SubSize="11" ShowProduct="False"
+        MachineFile="Config\Machine.xml" HeadsFile="Config\Heads.xml" />
+
+    <!-- 운전 상태·메시지 칩 — [● 상태] | 메시지 한 줄 [자동]. 상태 = CurrentAction(진행 중 명령) · Move · Initialized(원점 완료)
+         + 운전 명령 막대가 기억하는 일시정지/운전 중. 메시지 = 켜진 알람 문구(alarms.json 조건을 직접 감시, 가장 최근 것 + 외 n건) 또는 안내.
+         등급: 정지 알람(exType 0, 빨강) > 경고(exType 1 · 헤드 교체 주기 넘음, 노랑) > 안내(exType 2 · 핸드휠 · 원점 필요 · 드라이런 · 가공 파일 없음 · 프로그램 끝, 청색).
+         비상정지: PLC 의 비상정지 입력은 핸드휠(MPG) EMS 하나(DI_MPG_Jog_EMS1, NC 라 TRUE = 풀림). 버튼을 푼 뒤 리셋 전까지 남는 래치
+         (Output.Status.EmergencyStop)는 알람 90 「비상정지 리셋 필요」로 칩에 나온다.
+         자동/수동은 gEquipment.Input.Command.ManualMode(수동조작 창 모드 칩)에서 오고 ModeTag(Output.Status.Mode)로 보인다.
+         누르면 칩 왼쪽 위 모서리에서 오른쪽 · 아래로 560×572 상세 카드(좁은 판 — 위치 · 값 한 줄, 원인 줄 없음): 알람마다 처음 본 시각 · 위치 · 값 ·
+         조치 · 리셋(축 = Axis_RESET · 그 밖 = CncCommand RESET, 등급 10 · 확인) · 작업기록 알람 보기. -->
+    <cnc:RunStateChip Canvas.Left="280" Canvas.Top="34" Width="220" Height="44"
+        opc:OpcUaNode.ConnectionId="cnc-plc" Layout="Row"
+        CurrentActionTag="::AsGlobalPV:gEquipment.Output.Status.CurrentAction"
+        MovingTag="::AsGlobalPV:gEquipment.Output.State.Move"
+        ModeTag="::AsGlobalPV:gEquipment.Output.Status.Mode"
+        InitializedTag="::AsGlobalPV:gEquipment.Output.State.Initialized"
+        ProgramTag="::AsGlobalPV:gEquipment.Input.Parameter.sProgramName"
+        CurrentLineTag="::AsGlobalPV:C_CurrentLine"
+        EStopTag="::AsGlobalPV:DI_MPG_Jog_EMS1" EStopLabel="핸드휠 비상정지"
+        MpgEnableTag="::AsGlobalPV:DI_MPG_Jog_Enable"
+        CompleteTag="::AsGlobalPV:gEquipment.Output.State.Complete"
+        DryRunTag="::AsGlobalPV:gEquipment.Input.Parameter.DryRun"
+        CncFolderFile="Config\CncFolder.xml" HeadsFile="Config\Heads.xml" HeadUsageFile="Database\HeadUsage.xml"
+        AlarmsFile="alarms.json"
+        XErrorIdTag="::AsGlobalPV:gAxis[0].Output.State.ErrorID" YErrorIdTag="::AsGlobalPV:gAxis[1].Output.State.ErrorID" ZErrorIdTag="::AsGlobalPV:gAxis[2].Output.State.ErrorID"
+        StatusIdTag="::AsGlobalPV:gEquipment.Output.Status.StatusID" CncCommandTag="::AsGlobalPV:gEquipment.Input.CncCommand" AxisPrefix="::AsGlobalPV:gAxis[{0}]"
+        ResetAccessLevel="10" RecordPanelId="Panel_Record" ErrorCodesFile="Config\ErrorCodes.xml"
+        DetailWidth="560" DetailHeight="572" DetailCompact="True" />
+
+    <!-- 헤더 오른쪽 묶음: 시계 · 자동/수동 · 알람 · 로그인 · 종료, 간격 12, 오른쪽 끝 1056 -->
+
+    <!-- 시계 -->
+    <ironControls:TimeBox Canvas.Left="512" Canvas.Top="44" Width="116" Height="24"
+        Format="HH:mm:ss' KST'"
+        FontFamily="{DynamicResource MonoFont}" FontSize="16" FontWeight="Medium"
+        Foreground="{DynamicResource Fg2}" Background="Transparent" />
+
+    <!-- 자동/수동 전환 — 알람 바로 앞. 지금 모드 = Output.Status.Mode, 다른 칸을 누르면 확인 뒤 Input.Command.ManualMode 에 쓴다
+         (PLC 는 CNC 가 쉬고 있을 때만 받는다 — 운전 중에는 막고 사유를 띄운다). 수동조작 창의 모드 칩과 같은 변수 -->
+    <cnc:ModeToggle Canvas.Left="640" Canvas.Top="34" Width="92" Height="44"
+        access:Access.Level="10"
+        opc:OpcUaNode.ConnectionId="cnc-plc"
+        ModeTag="::AsGlobalPV:gEquipment.Output.Status.Mode"
+        ModeCommandTag="::AsGlobalPV:gEquipment.Input.Command.ManualMode" ModeCommandTrueIsManual="True"
+        CurrentActionTag="::AsGlobalPV:gEquipment.Output.Status.CurrentAction"
+        MovingTag="::AsGlobalPV:gEquipment.Output.State.Move"
+        ProgramActiveTag="::AsGlobalPV:gEquipment.Output.Status.ProgramActive"
+        LabelSize="13" />
+
+    <!-- 알람 — 엔진 AlarmControl 배지 모드(활성 건수 + 깜빡임, 누르면 알람 창) -->
+    <ironControls:AlarmControl Canvas.Left="744" Canvas.Top="34" Width="112" Height="44"
+        access:Access.Level="10"
+        BadgeStyle="True" BadgeText="알람" />
+
+    <!-- 로그인 / 로그아웃 -->
+    <ironControls:LoginButton Canvas.Left="868" Canvas.Top="34" Width="88" Height="44"
+        LoginText="로그인" LogoutText="로그아웃"
+        Background="{DynamicResource Bg}" BorderBrush="{DynamicResource BorderStrong}"
+        FontFamily="{DynamicResource UiFont}" FontSize="14" FontWeight="Medium"
+        Foreground="{DynamicResource Fg2}" />
+
+    <!-- 프로그램 종료 — 런타임이 "종료할까요?" 예/아니오 확인 창을 띄운 뒤 닫는다 -->
+    <Button Canvas.Left="968" Canvas.Top="34" Width="88" Height="44" Style="{StaticResource ExitBtn}"
+            ToolTip="프로그램 종료"
+            action:HmiApplication.ExitOnClick="True">
+        <StackPanel Orientation="Horizontal">
+            <Viewbox Width="18" Height="18" VerticalAlignment="Center">
+                <Canvas Width="24" Height="24">
+                    <Path Stroke="{DynamicResource DangerFg}" StrokeThickness="2.2" StrokeStartLineCap="Round"
+                          StrokeEndLineCap="Round" Data="M12 3.5v8 M6.3 6.8a8 8 0 1 0 11.4 0" />
+                </Canvas>
+            </Viewbox>
+            <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" Text="종료"
+                       FontFamily="{DynamicResource UiFont}" FontSize="14" FontWeight="Medium"
+                       Foreground="{DynamicResource DangerFg}" />
+        </StackPanel>
+    </Button>
+
+    <!-- ===== 네비 B: 세그먼트 트랙 (24,104 · 1032×88, 안쪽 여백 6 · 칸 간격 4) ===== -->
+    <Border Canvas.Left="24" Canvas.Top="104" Width="1032" Height="88" CornerRadius="18" Background="#E6EAF0" />
+
+    <Button Canvas.Left="30" Canvas.Top="110" Width="201" Height="76" Style="{StaticResource SegTab}"
+            action:HmiNavigation.TargetPanelId="Panel_Job">
+        <StackPanel Orientation="Horizontal">
+            <Canvas Width="24" Height="24" VerticalAlignment="Center">
+                <Rectangle Canvas.Left="3" Canvas.Top="3" Width="7" Height="7" RadiusX="1" RadiusY="1" StrokeThickness="1.75"
+                           Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" />
+                <Rectangle Canvas.Left="14" Canvas.Top="3" Width="7" Height="7" RadiusX="1" RadiusY="1" StrokeThickness="1.75"
+                           Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" />
+                <Rectangle Canvas.Left="14" Canvas.Top="14" Width="7" Height="7" RadiusX="1" RadiusY="1" StrokeThickness="1.75"
+                           Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" />
+                <Rectangle Canvas.Left="3" Canvas.Top="14" Width="7" Height="7" RadiusX="1" RadiusY="1" StrokeThickness="1.75"
+                           Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" />
+            </Canvas>
+            <TextBlock Style="{StaticResource SegLabel}" Text="작업현황" />
+        </StackPanel>
+    </Button>
+
+    <Button Canvas.Left="235" Canvas.Top="110" Width="201" Height="76" Style="{StaticResource SegTab}"
+            action:HmiNavigation.TargetPanelId="Panel_IO">
+        <StackPanel Orientation="Horizontal">
+            <Canvas Width="24" Height="24" VerticalAlignment="Center">
+                <Rectangle Canvas.Left="4" Canvas.Top="4" Width="16" Height="16" RadiusX="2" RadiusY="2" StrokeThickness="1.75"
+                           Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" />
+                <Rectangle Canvas.Left="9" Canvas.Top="9" Width="6" Height="6" StrokeThickness="1.75"
+                           Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" />
+                <Path StrokeThickness="1.75" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                      Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}"
+                      Data="M15,2 V4 M15,20 V22 M2,15 H4 M2,9 H4 M20,15 H22 M20,9 H22 M9,2 V4 M9,20 V22" />
+            </Canvas>
+            <TextBlock Style="{StaticResource SegLabel}" Text="I/O 확인" />
+        </StackPanel>
+    </Button>
+
+    <Button Canvas.Left="440" Canvas.Top="110" Width="200" Height="76" Style="{StaticResource SegTab}"
+            action:HmiNavigation.TargetPanelId="Panel_Config">
+        <StackPanel Orientation="Horizontal">
+            <Canvas Width="24" Height="24" VerticalAlignment="Center">
+                <Path StrokeThickness="1.75" StrokeLineJoin="Round"
+                      Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}"
+                      Data="M12.22,2 h-0.44 a2,2 0 0 0 -2,2 v0.18 a2,2 0 0 1 -1,1.73 l-0.43,0.25 a2,2 0 0 1 -2,0 l-0.15,-0.08 a2,2 0 0 0 -2.73,0.73 l-0.22,0.38 a2,2 0 0 0 0.73,2.73 l0.15,0.1 a2,2 0 0 1 1,1.72 v0.51 a2,2 0 0 1 -1,1.74 l-0.15,0.09 a2,2 0 0 0 -0.73,2.73 l0.22,0.38 a2,2 0 0 0 2.73,0.73 l0.15,-0.08 a2,2 0 0 1 2,0 l0.43,0.25 a2,2 0 0 1 1,1.73 V20 a2,2 0 0 0 2,2 h0.44 a2,2 0 0 0 2,-2 v-0.18 a2,2 0 0 1 1,-1.73 l0.43,-0.25 a2,2 0 0 1 2,0 l0.15,0.08 a2,2 0 0 0 2.73,-0.73 l0.22,-0.39 a2,2 0 0 0 -0.73,-2.73 l-0.15,-0.08 a2,2 0 0 1 -1,-1.74 v-0.5 a2,2 0 0 1 1,-1.74 l0.15,-0.09 a2,2 0 0 0 0.73,-2.73 l-0.22,-0.38 a2,2 0 0 0 -2.73,-0.73 l-0.15,0.08 a2,2 0 0 1 -2,0 l-0.43,-0.25 a2,2 0 0 1 -1,-1.73 V4 a2,2 0 0 0 -2,-2 Z" />
+                <Ellipse Canvas.Left="9" Canvas.Top="9" Width="6" Height="6" StrokeThickness="1.75"
+                         Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" />
+            </Canvas>
+            <TextBlock Style="{StaticResource SegLabel}" Text="구성설정" />
+        </StackPanel>
+    </Button>
+
+    <Button Canvas.Left="644" Canvas.Top="110" Width="201" Height="76" Style="{StaticResource SegTab}"
+            action:HmiNavigation.TargetPanelId="Panel_Record">
+        <StackPanel Orientation="Horizontal">
+            <Canvas Width="24" Height="24" VerticalAlignment="Center">
+                <Path StrokeThickness="1.75" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                      Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}"
+                      Data="M12,20 V10 M18,20 V4 M6,20 V16" />
+            </Canvas>
+            <TextBlock Style="{StaticResource SegLabel}" Text="작업기록" />
+        </StackPanel>
+    </Button>
+
+    <Button Canvas.Left="849" Canvas.Top="110" Width="201" Height="76" Style="{StaticResource SegTab}"
+            action:HmiNavigation.TargetPanelId="Panel_History">
+        <StackPanel Orientation="Horizontal">
+            <Canvas Width="24" Height="24" VerticalAlignment="Center">
+                <Ellipse Canvas.Left="3" Canvas.Top="3" Width="18" Height="18" StrokeThickness="1.75"
+                         Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}" />
+                <Path StrokeThickness="1.75" StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                      Stroke="{Binding Tag, RelativeSource={RelativeSource AncestorType=Button}}"
+                      Data="M12,7 V12 L15,14" />
+            </Canvas>
+            <TextBlock Style="{StaticResource SegLabel}" Text="작업이력" />
+        </StackPanel>
+    </Button>
+</Canvas>

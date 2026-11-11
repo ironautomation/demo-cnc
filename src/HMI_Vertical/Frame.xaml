@@ -1,0 +1,18 @@
+<Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Width="1080"
+        Height="1920"
+        Background="Transparent">
+    <!-- DemoCNC 세로 셸: 위 200 = 헤더 64 + 네비 세그먼트 트랙 88 (여백 24·간격 16 포함),
+         아래 1720 = 작업 화면. 리전 이름은 project.manifest.json 의 regions 와 같아야 한다. -->
+    <Canvas x:Name="TopRegion"
+            Canvas.Left="0"
+            Canvas.Top="0"
+            Width="1080"
+            Height="200" />
+    <Canvas x:Name="ContentRegion"
+            Canvas.Left="0"
+            Canvas.Top="200"
+            Width="1080"
+            Height="1720" />
+</Canvas>
