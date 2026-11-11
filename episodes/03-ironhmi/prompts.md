@@ -2,7 +2,7 @@
 
 > 데모 CNC 장비의 IronHMI 조작 화면(`src/HMI_Vertical`, `src/HMI_Horizontal`) 초안을 AI와 만들 때 쓴 프롬프트를 정리한 것입니다.
 > 순서는 **설계 → 구현 계획 → 작업 → 마무리**입니다. 경로·주소는 자기 환경에 맞게 바꿔 쓰세요(`<...>` 자리).
-> 당시에는 세로판·가로판 두 벌을 만들었고, 이 저장소에는 영상에서 쓴 가로판만 `src/HMI` 로 들어 있습니다. 프롬프트는 쓴 그대로 두었으므로 프롬프트 안의 `src/HMI_Horizontal` 은 지금의 `src/HMI`, `IO\IO` 는 `Cnc/OpMode`, `AxisMgr` 는 `Motion/AxisManual` 입니다.
+> 당시에는 세로판·가로판 두 벌을 만들었고, 이 저장소에는 가로판이 `src/HMI`, 세로판이 `src/HMI_Vertical` 로 들어 있습니다. 프롬프트는 쓴 그대로 두었으므로 프롬프트 안의 `src/HMI_Horizontal` 은 지금의 `src/HMI`, `IO\IO` 는 `Cnc/OpMode`, `AxisMgr` 는 `Motion/AxisManual` 입니다.
 
 ---
 

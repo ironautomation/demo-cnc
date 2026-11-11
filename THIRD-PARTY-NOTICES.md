@@ -2,7 +2,7 @@
 
 이 저장소에 들어 있는 파일 중 일부는 다른 회사·개발자의 구성요소를 포함합니다.
 
-## `src/HMI/Controls/CncControls.dll` 에 포함된 오픈소스
+## `src/HMI/Controls/CncControls.dll` · `src/HMI_Vertical/Controls/CncControls.dll` 에 포함된 오픈소스
 
 `CncControls.dll` 은 아래 라이브러리를 리소스로 포함(임베드)합니다. 두 라이브러리 모두 MIT 라이선스입니다.
 

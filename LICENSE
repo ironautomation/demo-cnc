@@ -28,5 +28,5 @@ under B&R's terms), the Claude Code hooks, rules and skills under .claude/,
 the G-code under gcode/, the material and samples under episodes/, and the
 documentation.
 
-The IronHMI project under src/HMI is covered by LICENSE-HMI.md
+The IronHMI projects under src/HMI and src/HMI_Vertical are covered by LICENSE-HMI.md
 instead.

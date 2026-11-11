@@ -25,6 +25,7 @@
 CLAUDE.md · .claude/           AI 도구가 읽는 설명서 · 규칙 · 훅 (②)
 src/PLC/                       Automation Studio 프로젝트 DemoCNC.apj (①②④)
 src/HMI/                       IronHMI 가로 화면(영상에서 쓴 화면), 3D 모델 (③④)
+src/HMI_Vertical/              IronHMI 세로 화면(1080×1920) — 같은 태그 · 컨트롤, 배치만 다름 (③)
 gcode/                         시험 G코드 (②④)
 docs/build-cli.md              명령줄 빌드 (②)
 episodes/NN-*/                 편마다 영상 장면 ↔ 파일, 표, 예제
@@ -46,7 +47,7 @@ episodes/NN-*/                 편마다 영상 장면 ↔ 파일, 표, 예제
    git clone https://github.com/ironautomation/demo-cnc.git
    ```
 2. Automation Studio 에서 `src/PLC/DemoCNC.apj` 를 열고 빌드합니다(AS 의 Rebuild All 또는 [`docs/build-cli.md`](docs/build-cli.md)). Main 오류 0 이면 됩니다.
-3. 장비가 없으면 ARsim(시뮬레이션)으로 전송하고, IronHMI 로 `src/HMI` 을 열어 3D 트윈에서 `gcode/` 의 시험 파일을 돌려 봅니다. HMI 는 기본으로 `opc.tcp://127.0.0.1:4840` 에 붙습니다.
+3. 장비가 없으면 ARsim(시뮬레이션)으로 전송하고, IronHMI 로 `src/HMI`(세로 모니터면 `src/HMI_Vertical`)를 열어 3D 트윈에서 `gcode/` 의 시험 파일을 돌려 봅니다. HMI 는 기본으로 `opc.tcp://127.0.0.1:4840` 에 붙습니다.
 4. 실제 장비에서는 PLC IP(`Hardware.hw`, 예시 값 `192.0.2.10`)와 G코드 공유 폴더 주소 · 계정(`Logical/Cnc/PrgShare/Variables.var` 의 `shareParam`, 예시 값)을 현장에 맞게 바꿉니다.
 
 ## 주의
@@ -64,7 +65,7 @@ episodes/NN-*/                 편마다 영상 장면 ↔ 파일, 표, 예제
 ## 라이선스
 
 - PLC ST 코드 · 훅 · 스크립트 · 문서 · 예제: [MIT](LICENSE)
-- IronHMI 프로젝트(`src/HMI`): [LICENSE-HMI.md](LICENSE-HMI.md)
+- IronHMI 프로젝트(`src/HMI`, `src/HMI_Vertical`): [LICENSE-HMI.md](LICENSE-HMI.md)
 - `src/PLC/Logical/Libraries/` 는 B&R 이 배포하는 라이브러리이며 MIT 대상이 아닙니다.
 - 함께 들어 있는 오픈소스 · 제조사 파일: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)
 

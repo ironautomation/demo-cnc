@@ -100,15 +100,15 @@
     <!-- IRON AUTOMATION 로고(Images/IronLogo.png, 1280×436) — 레일 안쪽 폭 120 에 맞춰 높이 41 -->
     <Image Canvas.Left="12" Canvas.Top="26" Width="120" Height="41" Stretch="Uniform"
            Source="Images/IronLogo.png" />
-    <!-- 장비 이름 두 줄 — Config\Machine.xml 의 이름(기본 「범용 CNC」) · Config\Heads.xml 의 장착 헤드(체크리스트 4-4) -->
+    <!-- 장비 이름 두 줄 — Config\Machine.xml 의 이름(기본 「범용 CNC」) · Config\Heads.xml 의 장착 헤드 -->
     <cnc:MachineTitle Canvas.Left="4" Canvas.Top="76" Width="136" Height="44" NameSize="16" SubSize="11" ShowProduct="False" Align="Center"
         MachineFile="Config\Machine.xml" HeadsFile="Config\Heads.xml" />
 
-    <!-- 운전 상태·메시지 칩(체크리스트 1, 세로판 헤더와 같은 바인딩) — 레일 폭 120 에 맞춘 두 줄: 위 ● 상태, 아래 자동 · 메시지(말줄임).
+    <!-- 운전 상태·메시지 칩(세로판 헤더와 같은 바인딩) — 레일 폭 120 에 맞춘 두 줄: 위 ● 상태, 아래 자동 · 메시지(말줄임).
          높이 32 → 56 이라 알람 버튼이 204 로 내려간다. 비상정지는 PLC 가 보는 유일한 입력인 핸드휠(MPG) EMS(DI_MPG_Jog_EMS1, NC · TRUE = 해제);
          래치(Output.Status.EmergencyStop)는 알람 90 으로 나온다.
          자동/수동은 gEquipment.Input.Command.ManualMode(수동조작 창 모드 칩)에서 오고 ModeTag(Output.Status.Mode)로 보인다.
-         누르면 칩 오른쪽 위 모서리를 기준으로 왼쪽 · 아래로 600×592 상세 카드(FB-14): 알람마다 처음 본 시각 · 위치 · 값(축 ErrorID · CNC StatusID) ·
+         누르면 칩 오른쪽 위 모서리를 기준으로 왼쪽 · 아래로 600×592 상세 카드: 알람마다 처음 본 시각 · 위치 · 값(축 ErrorID · CNC StatusID) ·
          원인 · 조치(alarms.json 정의) · 리셋(축 = Axis_RESET · 그 밖 = CncCommand RESET, 등급 10 · 확인) · 작업기록 알람 보기. -->
     <cnc:RunStateChip Canvas.Left="12" Canvas.Top="136" Width="120" Height="56"
         opc:OpcUaNode.ConnectionId="cnc-plc" Layout="Stack"

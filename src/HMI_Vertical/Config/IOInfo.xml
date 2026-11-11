@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- DemoCNC I/O 정의 — 실배선 점마다 PLC 태그(OPC UA 노드 키)·모듈 주소·설명("영문,한글"). 배선은 PLC IoMap.iom 기준:
+     X20DI9372 = 축 리미트·홈 센서 9점(드라이브 어댑터 gDS402_*), X20DI9372_a = MPG 펜던트 7점, X20DO8331 = 토출 출력(DO02 옛 켜기/끄기 레이저는 배선만 남고 안 씀 — 목록에서 뺌), X20DO4332-1 DO1 = PWM 레이저.
+     섹션 키 "영문,한글" — 한글이 I/O 확인 화면의 섹션 이름(키만 있으면 그대로). 정해진 순서(MPG · 축) 뒤의 섹션은 이름순.
+     type = bool(ON/OFF) · pwm(PwmOutput 0..32767 → %) · period(PwmPeriode µs → Hz).
+     identifier 는 스칼라 태그다(옛 gIOValue 배열 원소 DigitalInput[행,열]도 읽을 수 있지만 2026-10 PLC 개편으로 그 배열은 없다).
+     리미트 센서·MPG 비상정지는 B접점(NC)이라 ON 이 정상/풀림이다. 표시는 신호 그대로(reverse=false).
+     「 · PLC 미공개」는 PLC 에 있지만 OpcUaCsMap.uad 에 없어 값이 「—」로 남는 점이다. PLC 가 내놓으면 그 꼬리를 지운다
+     세로·가로 프로젝트의 이 파일은 같다. -->
+<SerializableDictionaryOfStringIOList>
+	<Item>
+		<Key>
+			<string>MPG Pendant</string>
+		</Key>
+		<Value>
+			<IOList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+				<inputs>
+					<IOInfo>
+						<address>X20DI9372_a.DI01</address>
+						<identifier>::AsGlobalPV:DI_MPG_AxisX</identifier>
+						<type>bool</type>
+						<content>MPG Axis X select,MPG X축 선택 · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372_a.DI02</address>
+						<identifier>::AsGlobalPV:DI_MPG_AxisY</identifier>
+						<type>bool</type>
+						<content>MPG Axis Y select,MPG Y축 선택 · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372_a.DI03</address>
+						<identifier>::AsGlobalPV:DI_MPG_AxisZ</identifier>
+						<type>bool</type>
+						<content>MPG Axis Z select,MPG Z축 선택 · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372_a.DI05</address>
+						<identifier>::AsGlobalPV:DI_MPG_X1</identifier>
+						<type>bool</type>
+						<content>MPG Multiple X1 (0.01 mm),MPG 배율 X1 (0.01 mm/눈금)</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372_a.DI06</address>
+						<identifier>::AsGlobalPV:DI_MPG_X10</identifier>
+						<type>bool</type>
+						<content>MPG Multiple X10 (0.1 mm),MPG 배율 X10 · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372_a.DI07</address>
+						<identifier>::AsGlobalPV:DI_MPG_X100</identifier>
+						<type>bool</type>
+						<content>MPG Multiple X100 (1 mm),MPG 배율 X100 · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372_a.DI08</address>
+						<identifier>::AsGlobalPV:DI_MPG_Jog_EMS1</identifier>
+						<type>bool</type>
+						<content>MPG Emergency stop (NC),MPG 비상정지 (B접점)</content>
+						<reverse>false</reverse>
+					</IOInfo>
+				</inputs>
+				<outputs />
+			</IOList>
+		</Value>
+	</Item>
+	<Item>
+		<Key>
+			<string>Axis System</string>
+		</Key>
+		<Value>
+			<IOList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+				<inputs>
+					<IOInfo>
+						<address>X20DI9372.DI01</address>
+						<identifier>::AsGlobalPV:gDS402_X.DigitalInputs.NegativeLimitSwitch</identifier>
+						<type>bool</type>
+						<content>X-Axis RLS (NC),X축 - 리미트 센서 (B접점) · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372.DI02</address>
+						<identifier>::AsGlobalPV:gDS402_X.DigitalInputs.HomingSwitch</identifier>
+						<type>bool</type>
+						<content>X-Axis Home Sensor,X축 홈 센서 · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372.DI03</address>
+						<identifier>::AsGlobalPV:gDS402_X.DigitalInputs.PositiveLimitSwitch</identifier>
+						<type>bool</type>
+						<content>X-Axis FLS (NC),X축 + 리미트 센서 (B접점) · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372.DI04</address>
+						<identifier>::AsGlobalPV:gDS402_Y.DigitalInputs.NegativeLimitSwitch</identifier>
+						<type>bool</type>
+						<content>Y-Axis RLS (NC),Y축 - 리미트 센서 (B접점) · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372.DI05</address>
+						<identifier>::AsGlobalPV:gDS402_Y.DigitalInputs.HomingSwitch</identifier>
+						<type>bool</type>
+						<content>Y-Axis Home Sensor,Y축 홈 센서 · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372.DI06</address>
+						<identifier>::AsGlobalPV:gDS402_Y.DigitalInputs.PositiveLimitSwitch</identifier>
+						<type>bool</type>
+						<content>Y-Axis FLS (NC),Y축 + 리미트 센서 (B접점) · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372.DI07</address>
+						<identifier>::AsGlobalPV:gDS402_Z.DigitalInputs.NegativeLimitSwitch</identifier>
+						<type>bool</type>
+						<content>Z-Axis RLS (NC),Z축 - 리미트 센서 (B접점) · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372.DI08</address>
+						<identifier>::AsGlobalPV:gDS402_Z.DigitalInputs.HomingSwitch</identifier>
+						<type>bool</type>
+						<content>Z-Axis Home Sensor,Z축 홈 센서 · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DI9372.DI09</address>
+						<identifier>::AsGlobalPV:gDS402_Z.DigitalInputs.PositiveLimitSwitch</identifier>
+						<type>bool</type>
+						<content>Z-Axis FLS (NC),Z축 + 리미트 센서 (B접점) · PLC 미공개</content>
+						<reverse>false</reverse>
+					</IOInfo>
+				</inputs>
+				<outputs />
+			</IOList>
+		</Value>
+	</Item>
+	<Item>
+		<Key>
+			<string>Dispenser,디스펜서</string>
+		</Key>
+		<Value>
+			<IOList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+				<inputs />
+				<outputs>
+					<IOInfo>
+						<address>X20DO8331.DO01</address>
+						<identifier>::AsGlobalPV:DO_Dispenser_Start</identifier>
+						<type>bool</type>
+						<content>Dispense Start,토출 시작</content>
+						<reverse>false</reverse>
+					</IOInfo>
+				</outputs>
+			</IOList>
+		</Value>
+	</Item>
+	<Item>
+		<Key>
+			<string>Laser,레이저</string>
+		</Key>
+		<Value>
+			<IOList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+				<inputs />
+				<outputs>
+					<IOInfo>
+						<address>X20DO4332-1.DO1</address>
+						<identifier>::AsGlobalPV:PWM_Laser_Duty</identifier>
+						<type>pwm</type>
+						<content>Laser PWM duty (power),레이저 PWM 듀티 (파워)</content>
+						<reverse>false</reverse>
+					</IOInfo>
+					<IOInfo>
+						<address>X20DO4332-1.DO1</address>
+						<identifier>::AsGlobalPV:PWM_Laser_Period</identifier>
+						<type>period</type>
+						<content>Laser PWM frequency,레이저 PWM 주파수</content>
+						<reverse>false</reverse>
+					</IOInfo>
+				</outputs>
+			</IOList>
+		</Value>
+	</Item>
+</SerializableDictionaryOfStringIOList>

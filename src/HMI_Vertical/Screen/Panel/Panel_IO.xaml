@@ -1,0 +1,21 @@
+<Canvas
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:opc="clr-namespace:IronHMI.OpcUaBridge;assembly=IronHMI.OpcUaBridge"
+    xmlns:action="clr-namespace:IronHMI.Actions;assembly=IronHMI.Common"
+    xmlns:access="clr-namespace:IronHMI.Controls.Abstractions;assembly=IronHMI.Controls.Abstractions"
+    xmlns:cnc="clr-namespace:CncControls;assembly=CncControls"
+    Width="1080"
+    Height="1720"
+    Background="{DynamicResource Surface1}">
+    <!-- I/O 확인 — Config\IOInfo.xml 의 실배선 점(MPG 펜던트 7 · 축 리미트·홈 9 · 헤드 출력)을 섹션별로 보여준다(읽기 전용).
+         점마다 PLC 태그(DI_MPG_* · gDS402_* · DO_*)를 하나씩 구독한다. 2026-10 PLC 개편으로 gIOValue 배열은 없다.
+         「 · PLC 미공개」가 붙은 점은 PLC 가 OPC UA 에 아직 내놓지 않아 값이 「—」로 남는다. -->
+    <cnc:GuiClickLogger ScreenName="IO" LogFolder="Logs\Event" />
+    <cnc:IoCheckControl
+        Canvas.Left="0" Canvas.Top="0" Width="1080" Height="1720"
+        opc:OpcUaNode.ConnectionId="cnc-plc"
+        IoInfoPath="Config\IOInfo.xml"
+        HeadsFile="Config\Heads.xml"
+        KoreanContent="True" />
+</Canvas>

@@ -11,7 +11,7 @@
     <!-- 작업현황 가로판(R안 = 오른쪽 세로 레일, 2026-10-12). 콘텐츠 리전 (0,0 · 1776×1080),
          레일은 x 1776..1920 의 NavRegion. 바깥 여백 12 · 카드 간격 12.
          왼쪽(x 12..924): 3D 트윈 912×790 + 프로그램 카드 912×254(파일 · 진행 · 오늘 생산 칩 · G코드 5줄). 오른쪽 칸(x 936..1764, 폭 828): 축 콕핏 276 ·
-         플러그인 영역 484 · 버튼 칸 64 · 속도 배율 64 · 운전 명령 120(레일 바로 옆 오른손 자리) — plugin-structure.md 5-3, 목업 FB-24.
+         플러그인 영역 484 · 버튼 칸 64 · 속도 배율 64 · 운전 명령 120(레일 바로 옆 오른손 자리).
          떠 있는 창(수동조작 · 시뮬레이션) · 가공 파일 창 · 트렌드 상세 · 시뮬 리포트는 이 패널 안 오버레이. 조작(조그 · 원점 · 서보 · 헤드 출력)은 수동조작 창 한 곳. -->
 
     <Canvas.Resources>
@@ -51,7 +51,7 @@
 
     <!-- 화면 클릭 감사 로그(작업기록 「화면 이벤트」) -->
     <cnc:GuiClickLogger ScreenName="Job" LogFolder="Logs\Event" />
-    <!-- 연속 운전 자동 시작(비가시, 2026-10-19 FB-15) — 가공 파일 창 「연속 운전」으로 올린 순서(ProgramQueue)를 돌린다: 앞 파일이 「완료」로 끝나면
+    <!-- 연속 운전 자동 시작(비가시, 2026-10-19) — 가공 파일 창 「연속 운전」으로 올린 순서(ProgramQueue)를 돌린다: 앞 파일이 「완료」로 끝나면
          다음 파일 이름을 sProgramName 에 쓰고 PLC 가 쉬면 CncCommand 2. 파일마다 반복 ×n · ∞, 정지 · 에러면 멈추고 프로그램 카드에서 이어 갈 방법을 고른다.
          마지막 순서는 Database\ProgramQueue.xml. -->
     <cnc:ProgramQueueRunner opc:OpcUaNode.ConnectionId="cnc-plc"
@@ -136,7 +136,7 @@
         CncFolderFile="Config\CncFolder.xml" GCodeConfigFile="Config\GCode.xml" VisibleLines="5" SideWidth="200"
         ProductionTargetFile="Config\Production.xml" JobDbPath="Database\jobhistory.db" />
 
-    <!-- ===== 축 콕핏 (936,12 · 828×276) — 보기 전용(조작은 수동조작 창). 줄 높이 · 추이 그래프를 줄여 아래를 플러그인 영역에 내줬다(plugin-structure.md 5-3, 목업 FB-24).
+    <!-- ===== 축 콕핏 (936,12 · 828×276) — 보기 전용(조작은 수동조작 창). 줄 높이 · 추이 그래프를 줄여 아래를 플러그인 영역에 내줬다.
          리밋 · 홈 센서 = gDS402_X/Y/Z.DigitalInputs(읽기 전용 공개 — 리밋은 B접점) ===== -->
     <cnc:AxisCockpit Canvas.Left="936" Canvas.Top="12" Width="828" Height="276"
         opc:OpcUaNode.ConnectionId="cnc-plc"
@@ -148,7 +148,7 @@
         EStopTag="::AsGlobalPV:gEquipment.Output.Status.EmergencyStop" />
 
     <!-- ===== 플러그인 영역 (936,300 · 828×484, 4 × 4 칸 198×112 · 사이 12) — 지난 머신 속도 · 오늘 생산 카드 자리. 쓰는 헤드의 배치(Config\PluginLayout.xml —
-         구성설정 › 플러그인 › 플러그인 배치)대로 플러그인 카드를 놓는다(틀 = HMI · 몸통 = 플러그인, plugin-card-layout.md). 배치가 없으면 점선 + 「플러그인 배치 ›」(권한 10).
+         구성설정 › 플러그인 › 플러그인 배치)대로 플러그인 카드를 놓는다(틀 = HMI · 몸통 = 플러그인). 배치가 없으면 점선 + 「플러그인 배치 ›」(권한 10).
          헤드 카드 「›」 = 트렌드 상세. 오늘 생산은 프로그램 카드 머리줄 칩, 헤드 출력 칸은 없앴다(헤드는 하나 — 헤드 카드가 보인다) ===== -->
     <cnc:PluginArea Canvas.Left="936" Canvas.Top="300" Width="828" Height="484"
         opc:OpcUaNode.ConnectionId="cnc-plc" LayoutFile="Config\PluginLayout.xml" HeadsFile="Config\Heads.xml"
@@ -170,7 +170,7 @@
         SheetName="TrendSheet" />
 
     <!-- ===== 버튼 칸 (936,796 · 828×64 한 줄) — 작업 진행(256, 대기 예상 · 운전 중 잔여 · 끝 시각 · % · 일시정지 · 완료 소요) · 원점 복귀 · 대기 위치 · 수동조작 ·
-         시뮬레이션 · 드라이런(102.4, 사이 12) — 설명 없이 아이콘 + 이름(목업 FB-24). 원점 복귀 = CncCommand 8(Z → X·Y), 대기 위치 = Config\TeachPositions.xml(수동 모드에서만),
+         시뮬레이션 · 드라이런(102.4, 사이 12) — 설명 없이 아이콘 + 이름. 원점 복귀 = CncCommand 8(Z → X·Y), 대기 위치 = Config\TeachPositions.xml(수동 모드에서만),
          드라이런 = 한 칸으로 켜고 끈다(켜지면 옅은 파랑) ===== -->
     <cnc:JobProgressTile Canvas.Left="936" Canvas.Top="796" Width="256" Height="64" opc:OpcUaNode.ConnectionId="cnc-plc" MaxHeads="1" HeadsFile="Config\Heads.xml"
         ProgramActiveTag="::AsGlobalPV:gEquipment.Output.Status.ProgramActive" ProgramInterruptedTag="::AsGlobalPV:gEquipment.Output.Status.ProgramInterrupted"

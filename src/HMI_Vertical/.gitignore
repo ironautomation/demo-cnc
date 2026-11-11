@@ -1,0 +1,18 @@
+# IronHMI 런타임이 실행 중에 만드는 폴더 — users.db 에 계정 정보가 들어간다
+Database/
+Logs/
+
+# 컨트롤 팩 빌드 산출물 (Controls/CncControls.dll 은 post-build 로 갱신해 커밋한다)
+Controls/*/bin/
+Controls/*/obj/
+Controls/*/.vs/
+# 지정 위치 — HMI 가 처음 저장할 때 만든다(현장 값, PLC 개편으로 PLC RETAIN 에서 옮겨 옴). 배포·pull 이 현장 값을 덮지 않게 넣지 않는다
+Config/TeachPositions.xml
+# 헤드 구성을 바꾸기 전 파일 — 「헤드 구성 바꾸기」가 저장할 때 남긴다
+Config/Heads.bak.xml
+
+# 플러그인 고르기 — 첫 시작 때 Heads.xml 의 기준 장착 헤드로 만든다(현장 값)
+Config/Plugins.xml
+Config/PluginLayout.xml
+# 첫 시작 옮기기 전 파일
+Config/*.v1.bak.xml

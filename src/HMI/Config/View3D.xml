@@ -5,7 +5,7 @@
      라인(Line)은 곁에 붙인 모듈 장비까지.
      TableTopZ = 테이블 윗면 높이(씬 mm, 비드를 그리는 높이). ZUp = 기계 Z 가 커질 때 노즐이 올라가면 true —
      DemoCNC 실장비는 반대로 움직여 false(2026-10-07 현장 확인). ZAtTable = 노즐 끝이 테이블 윗면에 닿는 기계 Z(mm) — 씬 노즐 높이는
-     TableTopZ + (ZAtTable − Z). 레이저만 단 헤드(2026-10-16, replace_head_laser_only.py)는 레이저 출사구가 기준점이라 145(디스펜서 헤드의 니들 끝은 115)
+     TableTopZ + (ZAtTable − Z). 레이저만 단 헤드(2026-10-16)는 레이저 출사구가 기준점이라 145(디스펜서 헤드의 니들 끝은 115)
      — 출사구 높이를 실측하면 두 값을 같이 바꾼다. 노즐이 테이블을 뚫으면 값을 키우고, 떠 보이면 줄인다.
      BeadWidth/BeadHeight = 공통 자국 단면(mm, 3D 를 직접 그리지 않는 헤드), 6×4 는 너무 두꺼워 3×1.5. 헤드 플러그인이 그리는 자국 · 빔 단면은
      헤드 줄(Config\Heads.xml TraceWidth · TraceHeight · BeamDiameter, 없으면 플러그인 기본값), 헤드 끝 자리는 헤드 모델의 Tip 이 정한다.
