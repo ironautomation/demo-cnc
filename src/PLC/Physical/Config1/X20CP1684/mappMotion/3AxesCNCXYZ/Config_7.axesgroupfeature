@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="4.9"?>
+<Configuration>
+  <Element ID="Feature_HomingOrder" Type="axesgroupfeature">
+    <Selector ID="Type" Value="HomingOrder">
+      <Group ID="TogetherGroup[1]">
+        <Property ID="AxisRef[1]" Value="gAxis_Z" />
+      </Group>
+      <Group ID="TogetherGroup[2]">
+        <Property ID="AxisRef[1]" Value="gAxis_X" />
+        <Property ID="AxisRef[2]" Value="gAxis_Y" />
+      </Group>
+    </Selector>
+  </Element>
+</Configuration>

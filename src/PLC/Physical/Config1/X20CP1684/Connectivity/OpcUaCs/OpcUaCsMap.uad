@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="6.0"?>
+<OpcUaSource FileVersion="10">
+  <Aliases>
+    <ACLAliases />
+    <EURangeViolationAliases />
+    <EURangesAliases />
+    <EngineeringUnitAliases />
+  </Aliases>
+  <Module Name="&lt;Default&gt;">
+    <GlobalVariables Name="Global Variables">
+      <Variable Name="gEquipment" RecursiveEnable="2" />
+      <Variable Name="C_CurrentLine" />
+      <Variable Name="C_OverallRuntime" />
+      <Variable Name="C_MovementRuntime" />
+      <Variable Name="C_TP1_1" />
+      <Variable Name="C_TP1_2" />
+      <Variable Name="C_TP1_3" />
+      <Variable Name="C_TP2_1" />
+      <Variable Name="C_TP2_2" />
+      <Variable Name="C_TP2_3" />
+      <Variable Name="C_TP3_1" />
+      <Variable Name="C_TP3_2" />
+      <Variable Name="C_TP3_3" />
+      <Variable Name="C_TP4_1" />
+      <Variable Name="C_TP4_2" />
+      <Variable Name="C_TP4_3" />
+      <Variable Name="DI_Auto" />
+      <Variable Name="DI_MPG_AxisX" />
+      <Variable Name="DI_MPG_AxisY" />
+      <Variable Name="DI_MPG_AxisZ" />
+      <Variable Name="DI_MPG_Jog_EMS1" />
+      <Variable Name="DI_MPG_Jog_Enable" />
+      <Variable Name="DI_MPG_X1" />
+      <Variable Name="DI_MPG_X10" />
+      <Variable Name="DI_MPG_X100" />
+      <Variable Name="DO_Dispenser_Start" />
+      <Variable Name="DO_Laser_On" />
+      <Variable Name="PWM_Laser_Duty" />
+      <Variable Name="PWM_Laser_Period" />
+      <Variable Name="gAxis" RecursiveEnable="2" />
+      <Variable Name="gDispenser" RecursiveEnable="2" />
+      <Variable Name="gDS402_X" AccessLevel="1">
+        <Variable Name="DigitalInputs" AccessLevel="1">
+          <Variable Name="HomingSwitch" AccessLevel="1" />
+          <Variable Name="PositiveLimitSwitch" AccessLevel="1" />
+          <Variable Name="NegativeLimitSwitch" AccessLevel="1" />
+        </Variable>
+      </Variable>
+      <Variable Name="gDS402_Y" AccessLevel="1">
+        <Variable Name="DigitalInputs" AccessLevel="1">
+          <Variable Name="HomingSwitch" AccessLevel="1" />
+          <Variable Name="PositiveLimitSwitch" AccessLevel="1" />
+          <Variable Name="NegativeLimitSwitch" AccessLevel="1" />
+        </Variable>
+      </Variable>
+      <Variable Name="gDS402_Z" AccessLevel="1">
+        <Variable Name="DigitalInputs" AccessLevel="1">
+          <Variable Name="HomingSwitch" AccessLevel="1" />
+          <Variable Name="PositiveLimitSwitch" AccessLevel="1" />
+          <Variable Name="NegativeLimitSwitch" AccessLevel="1" />
+        </Variable>
+      </Variable>
+      <Variable Name="gLaser" RecursiveEnable="2" />
+      <Variable Name="gDriveDiag" RecursiveEnable="2" />
+      <Variable Name="gCncRun" RecursiveEnable="2" />
+      <Variable Name="gJogAlive" />
+      <Variable Name="gManualMoveResult" RecursiveEnable="2" />
+      <Variable Name="gHeadSupport" />
+      <Variable Name="gActiveHead" />
+      <Variable Name="gHeadRefused" />
+      <Variable Name="gZRef" RecursiveEnable="2" />
+      <Variable Name="DI_ZRef_Sensor" />
+      <Variable Name="gWorkOffset" RecursiveEnable="2" />
+      <Variable Name="gHeadOffset" RecursiveEnable="2" />
+      <Variable Name="SlowMoveLength" />
+      <Variable Name="SlowMoveVelocity" />
+      <Variable Name="Torque_X" />
+      <Variable Name="Torque_Y" />
+      <Variable Name="Torque_Z" />
+    </GlobalVariables>
+    <Task Name="RingBuffer">
+      <Variable Name="BufferHeadOn" />
+      <Variable Name="BufferHeadValue" />
+      <Variable Name="BufferLaserPower" />
+      <Variable Name="BufferMoving" />
+      <Variable Name="BufferX" />
+      <Variable Name="BufferY" />
+      <Variable Name="BufferZ" />
+      <Variable Name="Head" />
+    </Task>
+  </Module>
+</OpcUaSource>

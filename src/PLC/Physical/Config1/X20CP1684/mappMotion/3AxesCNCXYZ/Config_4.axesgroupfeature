@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="4.9"?>
+<Configuration>
+  <Element ID="Feature_Programs" Type="axesgroupfeature">
+    <Selector ID="Type" Value="Program">
+      <Selector ID="ModalDataBehaviour" Value="UseAxesGroupSettings" />
+      <Group ID="InitialSettings">
+        <Selector ID="InterpolationTypes" Value="LinearRapid" />
+        <Selector ID="PositionCoordinates" Value="Absolute" />
+        <Selector ID="CircleCoordinates" Value="Relative" />
+        <Selector ID="JACS_ACSProgramming" Value="JACS" />
+        <Selector ID="ContourConnection" Value="Inactive" />
+        <Selector ID="AccuracyHoldDelays" Value="None" />
+        <Selector ID="ProgrammingUnits" Value="UseAxesGroupSettings" />
+        <Group ID="Feedrates">
+          <Selector ID="FeedPath" Value="Standard" />
+          <Selector ID="FeedCharacteristic" Value="StandardCharacteristic" />
+          <Selector ID="FeedType" Value="Feedrate" />
+          <Selector ID="FeedReduction" Value="Inactive" />
+          <Property ID="FeedrateValue" Value="0.0" />
+          <Property ID="InverseFeedrateValue" Value="0.0" />
+          <Property ID="FeedratePerRevValue" Value="0.0" />
+        </Group>
+      </Group>
+      <Group ID="ProgramElements">
+        <Group ID="PVs">
+          <Group ID="PV[1]">
+            <Property ID="PvName" Value="::C_LaserPower" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="LaserPower" />
+              <Selector ID="Synchronization" Value="Path" />
+            </Group>
+          </Group>
+          <Group ID="PV[2]">
+            <Property ID="PvName" Value="::C_TP1_1" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP1_1" />
+            </Group>
+          </Group>
+          <Group ID="PV[3]">
+            <Property ID="PvName" Value="::C_TP1_2" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP1_2" />
+            </Group>
+          </Group>
+          <Group ID="PV[4]">
+            <Property ID="PvName" Value="::C_TP1_3" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP1_3" />
+            </Group>
+          </Group>
+          <Group ID="PV[5]">
+            <Property ID="PvName" Value="::C_TP2_1" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP2_1" />
+            </Group>
+          </Group>
+          <Group ID="PV[6]">
+            <Property ID="PvName" Value="::C_TP2_2" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP2_2" />
+            </Group>
+          </Group>
+          <Group ID="PV[7]">
+            <Property ID="PvName" Value="::C_TP2_3" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP2_3" />
+            </Group>
+          </Group>
+          <Group ID="PV[8]">
+            <Property ID="PvName" Value="::C_TP3_1" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP3_1" />
+            </Group>
+          </Group>
+          <Group ID="PV[9]">
+            <Property ID="PvName" Value="::C_TP3_2" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP3_2" />
+            </Group>
+          </Group>
+          <Group ID="PV[10]">
+            <Property ID="PvName" Value="::C_TP3_3" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP3_3" />
+            </Group>
+          </Group>
+          <Group ID="PV[11]">
+            <Property ID="PvName" Value="::C_TP4_1" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP4_1" />
+            </Group>
+          </Group>
+          <Group ID="PV[12]">
+            <Property ID="PvName" Value="::C_TP4_2" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP4_2" />
+            </Group>
+          </Group>
+          <Group ID="PV[13]">
+            <Property ID="PvName" Value="::C_TP4_3" />
+            <Group ID="Advanced">
+              <Property ID="Alias" Value="TP4_3" />
+            </Group>
+          </Group>
+        </Group>
+      </Group>
+      <Selector ID="DefaultLanguage" Value="BRGCode" />
+      <Selector ID="Location" Value="Default">
+        <Property ID="FileDevice" Value="CNC_PrgDir" />
+      </Selector>
+    </Selector>
+  </Element>
+  <Element ID="Feature_Jogging" Type="axesgroupfeature">
+    <Selector ID="Type" Value="Jogging" />
+  </Element>
+</Configuration>

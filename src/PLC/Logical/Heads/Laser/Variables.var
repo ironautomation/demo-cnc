@@ -1,0 +1,10 @@
+VAR
+	autoOn : R_TRIG;
+	autoOff : F_TRIG;
+	fbPathInfo : MC_BR_PathInfo; (*actual / programmed path velocity for the corner compensation*)
+	supplyOn : BOOL := FALSE; (*laser allowed (no dry run, heavy alarm, E-stop)*)
+	emissionOn : BOOL := FALSE; (*laser commanded on (auto Emission / manual) and supply on*)
+	power : REAL := 0.0; (*power [%] after the source selection and the corner compensation*)
+	speedRatio : REAL := 1.0; (*actual / programmed path velocity, limited to MinSpeedRatio..1*)
+	duty : REAL := 0.0; (*PWM duty [%]*)
+END_VAR

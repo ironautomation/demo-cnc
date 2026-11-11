@@ -1,0 +1,34 @@
+VAR CONSTANT
+	STEP_X1 : LREAL := 0.01; (*[mm/detent] selector x1*)
+	STEP_X10 : LREAL := 0.1; (*[mm/detent] selector x10*)
+	STEP_X100 : LREAL := 1.0; (*[mm/detent] selector x100*)
+	COUNTS_PER_DETENT : LREAL := 4.0; (*encoder counts per detent (quadrature x4)*)
+	MPG_ACC : REAL := 500.0; (*[mm/s^2]*)
+END_VAR
+VAR
+	selectAxis : USINT := 0; (*axis selected on the handwheel, 1..3 = X..Z, 0 = none*)
+	lastSelectAxis : USINT := 0;
+	ax : USINT; (*selectAxis - 1*)
+	axisRef : ARRAY[0..2] OF UDINT; (*ADR of gAxis_X/Y/Z*)
+	i : USINT;
+	axisActive : ARRAY[0..2] OF BOOL; (*the axis follows the handwheel, target taken from its position*)
+	target : LREAL; (*target position of the active axis [mm]*)
+	stepPerDetent : LREAL;
+	counterReset : BOOL; (*IoMap : %QX X20DC1176 Encoder01Reset*)
+	counterValue : DINT; (*IoMap : %ID X20DC1176 Encoder01*)
+	prevCounter : DINT;
+	delta : DINT;
+	counterSynced : BOOL; (*FALSE after a reset : the next counter change only synchronises*)
+	movePending : ARRAY[0..2] OF BOOL;
+	enableRise : R_TRIG;
+	axisChange : R_TRIG;
+	axisReleased : F_TRIG;
+	emgTrig : R_TRIG;
+END_VAR
+(*mapp Motion FBs*)
+VAR
+	fbMpgMove : ARRAY[0..2] OF MC_MoveAbsolute;
+	fbMpgStop : ARRAY[0..2] OF MC_Stop;
+	fbMpgPosition : ARRAY[0..2] OF MC_ReadActualPosition;
+	fbMpgStatus : ARRAY[0..2] OF MC_ReadStatus;
+END_VAR

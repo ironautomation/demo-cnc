@@ -1,0 +1,106 @@
+VAR
+	fbCnc : MpCnc3Axis;
+	CncParameters : MpCnc3AxisParType;
+	bootPowerDone : BOOL := FALSE; (*servo powered once after boot*)
+	initThenHome : BOOL := FALSE; (*INIT continues with HOME (HMI) or stops after power on (boot)*)
+	cmdAllowed : BOOL := FALSE; (*preconditions of the command in the mailbox*)
+END_VAR
+(*Emergency stop*)
+VAR
+	emergencyLatched : BOOL := FALSE; (*set by the E-stop button, cleared by RESET once released*)
+	emergencyTimer : TON; (*power off at the latest after this, even if the axes have not stopped*)
+END_VAR
+(*Main*)
+VAR
+	i : USINT := 0;
+	cncCommand : E_CNC_ACTION := E_ACT_IDLE;
+	commandStep : USINT := 0;
+	stepTimer : TON;
+END_VAR
+(*Axis Reset*)
+VAR
+	fbAxisReset : ARRAY[0..2] OF MC_Reset;
+END_VAR
+(*X Axis Deviation Compensation - mapp Motion*)
+VAR
+	fbMechDevCompX : MC_BR_MechDeviationComp;
+END_VAR
+(*M Function - mapp Motion*)
+VAR
+	fbMFunction : ARRAY[0..7] OF MC_BR_MFunction; (*0 = M41, 1 = M42, 2 = M44, 3 = M45, 4 = M61, 5 = M62 (async), 6 = M50, 7 = M51 (blocking, no function - reset at once by act_MSpare)*)
+	fbMFunctionSpare : ARRAY[0..7] OF MC_BR_MFunction; (*0..7 = M52..M59 : rest of the blocking range 50..59 (Config_6) - no function on this machine, reset at once by act_MSpare so a program does not wait there for ever*)
+	mfSpareLast : USINT := 0; (*last of M50..M59 passed since power-up, 0 = none - diagnosis only*)
+	mfClear : BOOL := FALSE; (*no program / E-stop : discharge and laser off, M41 / M61 held in reset*)
+	programStarted : BOOL := FALSE; (*a production run was started by START (not MDI)*)
+	programAlive : BOOL := FALSE; (*a program runs or is paused (HALT, single step, M01) : fbCnc.MoveActive OR programHeld*)
+	programEndTrig : F_TRIG; (*end of programAlive*)
+END_VAR
+(*Single step / optional stop (M01) - gCncRun*)
+VAR
+	fbOptStop : MC_BR_OptionalStop; (*the program stops at M01 while gCncRun.Input.OptionalStop is set*)
+	programHeld : BOOL := FALSE; (*the program waits for CONTINUE : interrupted (HALT, single step), standing at M01 or waiting before its real run (start at line)*)
+	stepHold : BOOL := FALSE; (*the program stopped by itself (single step, M01, start at line waiting) : act_Start hands over to the mailbox like after HALT, so CONTINUE is taken*)
+END_VAR
+(*Start at line (E_ACT_START_AT_LINE) - gCncRun*)
+VAR
+	lineStartRun : BOOL := FALSE; (*the alive program was started by E_ACT_START_AT_LINE*)
+	lineStartPrep : BOOL := FALSE; (*that program is before its real run : simulation up to the start line, repositioning, waiting*)
+	lineStartWait : BOOL := FALSE; (*that program waits for CONTINUE before or after the repositioning*)
+END_VAR
+(*MDI (act_MoveBlock)*)
+VAR
+	mdiDoneOld : BOOL := FALSE; (*MoveDone was already set when the block was given : not this block's until it falls*)
+	mdiAbortOld : BOOL := FALSE; (*the same for CommandAborted*)
+END_VAR
+(*Heads - only the active head (gActiveHead) is taken (Action_Head.st)*)
+VAR
+	headDispOk : BOOL := TRUE; (*the dispenser may be switched on : gActiveHead is 0 (not known) or the dispenser*)
+	headLaserOk : BOOL := TRUE; (*the laser may be switched on : gActiveHead is 0 (not known) or the laser*)
+	headRefuse : USINT := 0; (*head refused in this cycle (HEAD_ constants), 0 = none*)
+	headMfTrig : ARRAY[0..5] OF R_TRIG; (*rising edge of fbMFunction[0..5].Value*)
+	headRunTrig : R_TRIG; (*a run starts (programAlive) : the last refusal is cleared*)
+END_VAR
+(*Teach positions*)
+VAR
+	teachSum : LREAL := 0.0; (*only references C_TP1_1 .. C_TP4_3 in _INIT so that the global PVs are created on the target*)
+END_VAR
+(*Z reference measurement (Action_ZRef.st) - single-axis moves of its own, machine coordinates*)
+VAR
+	fbZrMove : ARRAY[0..2] OF MC_MoveAbsolute; (*0 = X, 1 = Y, 2 = Z - only used by the measurement*)
+	fbZrHalt : ARRAY[0..2] OF MC_Halt;
+	zrActive : BOOL := FALSE; (*measurement running (cncCommand = E_ACT_MEASURE_Z, steps 10..61)*)
+	zrFail : USINT := 0; (*ErrorId to report once Z is back at SafeZ*)
+	zrVel : REAL := 0.0; (*search velocity [mm/s]*)
+	zrMoveVel : REAL := 0.0; (*velocity of the other moves = SystemSpeed, like ManualMove [mm/s]*)
+END_VAR
+(*Work offsets G54..G57 (Action_WorkOffset.st) - the active offset is set as the standard frame SCS1 before a run*)
+VAR
+	fbWorkFrame : MC_BR_SetStandardFrame;
+	woStep : USINT := 0; (*frame engine: 0 idle, 1 requested by act_Start / act_MoveBlock, 10 setting, 100 set, 200 failed*)
+	woNeed : BOOL := FALSE; (*the frame has to be set before a run : the active offset or the frame set last is not 0*)
+	woWant : McFrameType; (*frame of the active offset*)
+	woSet : McFrameType; (*frame set last since boot (the axes group starts with 0)*)
+	woOk : BOOL := FALSE; (*Apply accepted*)
+	woIdx : USINT := 0;
+	woTimer : TON;
+END_VAR
+(*Head (tool) offsets (Action_HeadOffset.st) - minus the mounted head's offset is set as the standard frame SCS2 before a run*)
+VAR
+	fbHeadFrame : MC_BR_SetStandardFrame;
+	hoStep : USINT := 0; (*frame engine: 0 idle, 1 requested by act_Start / act_MoveBlock, 10 setting, 100 set, 200 failed*)
+	hoNeed : BOOL := FALSE; (*the frame has to be set before a run : the active head's offset or the frame set last is not 0*)
+	hoWant : McFrameType; (*frame of the mounted head (minus its offset)*)
+	hoSet : McFrameType; (*frame set last since boot (the axes group starts with 0)*)
+	hoOk : BOOL := FALSE; (*Apply accepted*)
+	hoIdx : USINT := 0;
+	hoTimer : TON;
+END_VAR
+VAR CONSTANT
+	C_ZREF_PROBE_VEL : REAL := 2.0; (*default search velocity of the Z reference measurement [mm/s]*)
+	C_ZREF_MAX_VEL : REAL := 10.0; (*largest search velocity accepted [mm/s]*)
+	C_ZREF_MOVE_VEL : REAL := 50.0; (*velocity of the other measurement moves when SystemSpeed is 0 [mm/s]*)
+	C_ZREF_MAX_SEARCH : LREAL := 50.0; (*largest search range MaxZ - StartZ [mm]*)
+	C_ZREF_ACC : REAL := 500.0; (*acceleration / deceleration of the measurement moves and halts [mm/s2] - as AxisManual DEFAULT_ACC / DEFAULT_DEC*)
+	C_WO_MAX : LREAL := 10000.0; (*largest work offset accepted by Apply [mm]*)
+	C_HO_MAX : LREAL := 1000.0; (*largest head offset accepted by Apply [mm]*)
+END_VAR

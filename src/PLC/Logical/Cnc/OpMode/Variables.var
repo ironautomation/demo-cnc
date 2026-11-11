@@ -1,0 +1,3 @@
+VAR
+	ManualModeTrigger : F_TRIG := (0);
+END_VAR

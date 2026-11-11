@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="4.9"?>
+<Configuration>
+  <Element ID="gCncXYZ" Type="axesgroup">
+    <Selector ID="Type" Value="PathGenAxesGroup">
+      <Group ID="PhysicalAxes">
+        <Group ID="JointAxes">
+          <Group ID="JointAxis[1]">
+            <Property ID="Name" Value="QX" />
+            <Property ID="AxisRef" Value="gAxis_X" />
+          </Group>
+          <Group ID="JointAxis[2]">
+            <Property ID="Name" Value="QY" />
+            <Property ID="AxisRef" Value="gAxis_Y" />
+          </Group>
+          <Group ID="JointAxis[3]">
+            <Property ID="Name" Value="QZ" />
+            <Property ID="AxisRef" Value="gAxis_Z" />
+          </Group>
+        </Group>
+      </Group>
+      <Group ID="MechanicalSystem">
+        <Property ID="MechSysRef" Value="MechSys_3AxCNCXYZ" />
+      </Group>
+      <Group ID="AxesGroupFeatures">
+        <Property ID="FeatureRef[1]" Value="Feature_Programs" />
+        <Property ID="FeatureRef[2]" Value="Feature_Jogging" />
+        <Property ID="FeatureRef[3]" Value="Feature_MFunctions" />
+        <Property ID="FeatureRef[4]" Value="Feature_HomingOrder" />
+        <Property ID="FeatureRef[5]" Value="Feature_PrgSimAndRestart" />
+      </Group>
+    </Selector>
+  </Element>
+</Configuration>

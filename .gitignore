@@ -1,0 +1,16 @@
+# B&R Automation Studio - build output / diagnosis / per-user settings
+Binaries/
+Temp/
+Diagnosis/
+*.set
+*.isopen
+
+# IronHMI runtime output (users.db holds account data)
+Database/
+Logs/
+*.log
+
+# editor / per-user
+.vscode/
+*.user
+

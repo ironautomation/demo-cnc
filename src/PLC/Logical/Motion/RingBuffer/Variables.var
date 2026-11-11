@@ -1,0 +1,23 @@
+
+VAR CONSTANT
+	RB_SIZE : UDINT := 500; (*number of samples: 500 * 2ms = 1s history.
+	                          HMI polls every ~100ms - the buffer only bridges poll gaps.
+	                          Kept small so the HMI reads stay fast and regular.*)
+	RB_MAX : UDINT := 499; (*RB_SIZE - 1*)
+END_VAR
+
+VAR
+	BufferX : ARRAY[0..RB_MAX] OF LREAL; (*X axis actual position [mm]*)
+	BufferY : ARRAY[0..RB_MAX] OF LREAL; (*Y axis actual position [mm]*)
+	BufferZ : ARRAY[0..RB_MAX] OF LREAL; (*Z axis actual position [mm]*)
+	BufferHeadOn : ARRAY[0..RB_MAX] OF BOOL; (*TRUE while discharge or laser emission command is active*)
+	BufferMoving : ARRAY[0..RB_MAX] OF BOOL; (*TRUE while the equipment is moving.
+	                                           Sampled here so the HMI reads it on the same
+	                                           time base as the positions - the subscription
+	                                           value alone runs ahead of the buffered samples.*)
+	BufferLaserPower : ARRAY[0..RB_MAX] OF USINT; (*laser power output [%] (gLaser.Output.State.Power, after corner compensation, 0 while off).
+	                                                The HMI shades the 3D laser trace with it. One scan old - Laser runs after RingBuffer.*)
+	BufferHeadValue : ARRAY[0..RB_MAX] OF USINT; (*value of the active head 0..100 (gActiveHead) for the HMI head plugins - laser : = BufferLaserPower
+	                                               (also while gActiveHead is 0), dispenser : 0 (no value)*)
+	Head : UDINT := 0; (*next write position, wraps at RB_SIZE*)
+END_VAR

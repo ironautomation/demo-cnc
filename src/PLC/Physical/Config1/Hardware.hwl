@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?AutomationStudio FileVersion="4.9"?>
+<BR.AS.HardwareTopology>
+  <TimeStamps>
+    <TimeStamp LogicalPath="Config1.Hardware.hw" LastWriteTime="10/13/2026 12:11:57" />
+  </TimeStamps>
+  <Modules>
+    <Module Name="X20CP1684" Type="X20CP1684" X="98" Y="-237" />
+    <Module Name="X20IF10G1_1" Type="X20IF10G1-1" X="210" Y="-237" />
+    <Module Name="X20BM11_a" Type="X20BM11" X="248" Y="-237" />
+    <Module Name="X20DO8331" Type="X20DO8331" X="248" Y="-237" />
+    <Module Name="X20TB12_a" Type="X20TB12" X="248" Y="-210" />
+    <Module Name="X20BM11" Type="X20BM11" X="261" Y="-237" />
+    <Module Name="X20DI9372" Type="X20DI9372" X="261" Y="-237" />
+    <Module Name="X20TB12" Type="X20TB12" X="261" Y="-210" />
+    <Module Name="X20BM11_b" Type="X20BM11" X="274" Y="-237" />
+    <Module Name="X20DI9372_a" Type="X20DI9372" X="274" Y="-237" />
+    <Module Name="X20TB12_b" Type="X20TB12" X="274" Y="-210" />
+    <Module Name="X20BM11_c" Type="X20BM11" X="287" Y="-237" />
+    <Module Name="X20DC1176" Type="X20DC1176" X="287" Y="-237" />
+    <Module Name="X20TB12_c" Type="X20TB12" X="287" Y="-210" />
+    <Module Name="SGDXT_xxxxA0x_CoE_Drive_V5_1" Type="FBD.Hilscher.ECATGenSlaveDTM.SGDXT-xxxxA0x CoE Drive V5.1" X="473" Y="-17" />
+  </Modules>
+  <Links />
+  <InfoElements />
+</BR.AS.HardwareTopology>

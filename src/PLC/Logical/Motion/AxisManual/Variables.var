@@ -1,0 +1,82 @@
+VAR CONSTANT
+	DEFAULT_ACC : REAL := 500.0; (* [mm/s^2] - keep consistent with axis config MovementLimits *)
+	DEFAULT_DEC : REAL := 500.0; (* [mm/s^2] *)
+END_VAR
+VAR
+	i : INT := 0;
+	command : ARRAY[0..2] OF AXIS_COMMAND;
+	commandStep : ARRAY[0..2] OF SINT;
+	moveStep : USINT := 100;
+	JogSpeed : ARRAY[0..2] OF REAL;
+	jogPosActive : ARRAY[0..2] OF BOOL := [3(FALSE)];
+	jogNegActive : ARRAY[0..2] OF BOOL := [3(FALSE)];
+	allHomed : BOOL := FALSE;
+	cncIdle : BOOL := FALSE;
+	axisPowerReq : ARRAY[0..2] OF BOOL := [3(FALSE)]; (*per-axis power held by fbPower (Axis_POWER)*)
+	settleTimer : ARRAY[0..2] OF TON; (*HALT / STOP / MOVE_ADDITIVE step 2 : release the channel at the latest after this if the axis does not report standstill*)
+	jogFault : ARRAY[0..2] OF BOOL := [3(FALSE)]; (*jog FB had an error : held off until the next jog command*)
+	jogAllowed : BOOL := FALSE; (*screen jog (Axis_JOG_POSITIVE / NEGATIVE) taken and kept : manual mode, no handwheel, no CNC command (CurrentAction IDLE)*)
+END_VAR
+(*jog watchdog (gJogAlive from the HMI)*)
+VAR
+	jogAny : BOOL := FALSE; (*some axis is jogging*)
+	jogAliveArmed : BOOL := FALSE; (*gJogAlive changed during this jog : the HMI is watched*)
+	jogAlivePrev : UINT := 0;
+	jogAliveTimer : TON; (*gJogAlive standing still while jogging*)
+END_VAR
+(*drive warning alarm filter (gDriveDiag[].WarningAlarm)*)
+VAR
+	warnOnTimer : ARRAY[0..2] OF TON; (*the drive warning must stand this long before WarningAlarm rises*)
+	warnHoldTimer : ARRAY[0..2] OF TOF; (*WarningAlarm stays this long after the warning clears*)
+END_VAR
+(*position move result to the HMI (gManualMoveResult, act_MoveResult) - reporting only*)
+VAR CONSTANT
+	MOVE_RES_RUNNING : USINT := 1;
+	MOVE_RES_ARRIVED : USINT := 2;
+	MOVE_RES_REFUSED : USINT := 3;
+	MOVE_RES_CANCELLED : USINT := 4; (*ended before the target, the reason says why*)
+	MOVE_RSN_NONE : USINT := 0;
+	MOVE_RSN_ESTOP : USINT := 1;
+	MOVE_RSN_AUTO : USINT := 2;
+	MOVE_RSN_HANDWHEEL : USINT := 3;
+	MOVE_RSN_CNC_BUSY : USINT := 4;
+	MOVE_RSN_MOVING : USINT := 5;
+	MOVE_RSN_NOT_HOMED : USINT := 6;
+	MOVE_RSN_SERVO_OFF : USINT := 7;
+	MOVE_RSN_AXIS_ERROR : USINT := 8;
+	MOVE_RSN_AXIS_HALT : USINT := 9;
+	MOVE_RSN_STEP_FAILED : USINT := 10;
+END_VAR
+VAR
+	moveReq : BOOL := FALSE; (*a ManualMove request was there at the start of this scan (Cyclic takes it in every case)*)
+	moveAccepted : BOOL := FALSE; (*that request started the sequence*)
+	moveStepIn : USINT := 100; (*moveStep before act_MovePosition of this scan*)
+	moveEndReason : USINT := 0; (*why act_MovePosition ends a running move in this scan (its two checks), MOVE_RSN_NONE = it does not*)
+	moveFailed : BOOL := FALSE; (*an absolute axis move of the running sequence ended aborted or with an error*)
+END_VAR
+(* mapp Motion axis FBs *)
+VAR
+	fbAxisInfo : ARRAY[0..2] OF MC_ReadAxisInfo;
+	fbAxisStatus : ARRAY[0..2] OF MC_ReadStatus;
+	fbAxisPosition : ARRAY[0..2] OF MC_ReadActualPosition;
+	fbAxisVelocity : ARRAY[0..2] OF MC_ReadActualVelocity;
+	fbAxisTorque : ARRAY[0..2] OF MC_ReadActualTorque;
+	fbMoveAbs : ARRAY[0..2] OF MC_MoveAbsolute;
+	fbMoveAdd : ARRAY[0..2] OF MC_MoveAdditive;
+	fbJog : ARRAY[0..2] OF MC_BR_JogVelocity;
+	fbStop : ARRAY[0..2] OF MC_Stop;
+	fbHalt : ARRAY[0..2] OF MC_Halt;
+	fbReset : ARRAY[0..2] OF MC_Reset;
+	fbAxisError : ARRAY[0..2] OF MC_ReadAxisError;
+	fbPower : ARRAY[0..2] OF MC_Power;
+	fbHome : ARRAY[0..2] OF MC_Home;
+END_VAR
+(* software limits read once from the mappMotion axis config at startup, copied into gAxis[].Input.Parameter.SoftwareLimitsNeg / Pos *)
+VAR
+	fbAxCfg : MC_BR_ProcessConfig;
+	axMoveLim : McCfgAxMoveLimType;
+	cfgAxisName : ARRAY[0..2] OF STRING[32] := ['gAxis_X','gAxis_Y','gAxis_Z'];
+	cfgAxIdx : USINT := 0;
+	cfgLimitLoaded : BOOL := FALSE;
+	cfgLimitErrorID : ARRAY[0..2] OF DINT; (*ErrorID of reading the limits of that axis, 0 = read. On an error the limits of that axis stay 0 : ZRef refuses, the handwheel stops at 0*)
+END_VAR

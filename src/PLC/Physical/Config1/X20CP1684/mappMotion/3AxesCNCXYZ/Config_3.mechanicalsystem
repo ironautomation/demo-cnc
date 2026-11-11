@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="4.9"?>
+<Configuration>
+  <Element ID="MechSys_3AxCNCXYZ" Type="mechanicalsystem">
+    <Selector ID="Type" Value="3AxesCNC">
+      <Selector ID="Subtype">
+        <Group ID="JointAxesPositionLimits">
+          <Selector ID="JointAxis[1]" />
+          <Selector ID="JointAxis[2]" />
+          <Selector ID="JointAxis[3]" />
+        </Group>
+      </Selector>
+    </Selector>
+  </Element>
+</Configuration>

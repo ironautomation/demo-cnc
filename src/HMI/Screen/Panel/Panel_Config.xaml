@@ -1,0 +1,108 @@
+<Canvas
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:opc="clr-namespace:IronHMI.OpcUaBridge;assembly=IronHMI.OpcUaBridge"
+    xmlns:action="clr-namespace:IronHMI.Actions;assembly=IronHMI.Common"
+    xmlns:access="clr-namespace:IronHMI.Controls.Abstractions;assembly=IronHMI.Controls.Abstractions"
+    xmlns:ironControls="clr-namespace:IronControls;assembly=IronControls"
+    xmlns:cnc="clr-namespace:CncControls;assembly=CncControls"
+    Width="1776"
+    Height="1080"
+    Background="{DynamicResource Surface1}">
+    <!-- 구성설정(가로판) — 속도·소프트 리밋은 PLC 값을 직접 고치고(값을 누르면 키패드, 입력 즉시 PLC 에 쓰기), 지정 위치는 HMI 파일(Config\TeachPositions.xml)에 쓴다. 이 파일은 생성기(tools\make-config.ps1)로 만들었다:
+         왼쪽 칸 = 지정 위치(수동조작 「축 이동 위치」의 목표) · 속도/축 소프트 리밋. 레시피 카드는 2026-10 PLC 개편으로 PLC 레시피가 없어져 뺐다.
+         편집 권한 Access.Level 5 — 운전자(10)는 보기만. 확정 전 사용자 확인 필요. -->
+    <Canvas.Resources>
+        <Style x:Key="Edit" TargetType="ironControls:AnalogBox">
+            <Setter Property="opc:OpcUaNode.ConnectionId" Value="cnc-plc" />
+            <Setter Property="access:Access.Level" Value="5" />
+            <Setter Property="FontFamily" Value="{DynamicResource MonoFont}" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="{DynamicResource Fg1}" />
+            <Setter Property="Background" Value="{DynamicResource Bg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderStrong}" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+        <Style x:Key="PageTitle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource UiFont}" />
+            <Setter Property="FontSize" Value="22" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource Fg1}" />
+        </Style>
+        <Style x:Key="CardTitle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource UiFont}" />
+            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource Fg1}" />
+        </Style>
+        <Style x:Key="Caption" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource UiFont}" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{DynamicResource Fg2}" />
+        </Style>
+        <Style x:Key="ColHead" TargetType="TextBlock" BasedOn="{StaticResource Caption}">
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="TextAlignment" Value="Center" />
+        </Style>
+        <Style x:Key="RowHead" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{DynamicResource UiFont}" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Foreground" Value="{DynamicResource Fg1}" />
+        </Style>
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource Bg}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource Border}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="12" />
+        </Style>
+    </Canvas.Resources>
+
+    <cnc:GuiClickLogger ScreenName="Config" LogFolder="Logs\Event" />
+    <TextBlock Canvas.Left="12" Canvas.Top="10" Style="{StaticResource PageTitle}" Text="구성설정" />
+
+    <!-- ===== 탭 [위치 · 속도] (체크리스트 4-0) — ConfigTabBar 가 x:Name 으로 보이고 숨긴다. 콘텐츠는 왼쪽 탭 오른쪽 204..1764(폭 1560) 전체 ===== -->
+    <Canvas x:Name="TabPosition" Canvas.Left="0" Canvas.Top="0" Width="1776" Height="1080">
+    <!-- 지정 위치 — 이름·개수(최대 4)는 장비 설정 Config\Machine.xml(현장마다), 값(mm)은 Config\TeachPositions.xml(체크리스트 4-4) -->
+    <cnc:TeachPositionEditor Canvas.Left="204" Canvas.Top="12" Width="1560" Height="468" access:Access.Level="5" MachineFile="Config\Machine.xml" TeachFile="Config\TeachPositions.xml" AxisLimits="X:-5:450;Y:-5:430;Z:-5:145" RowHeight="72" />
+
+    <!-- ===== 속도 (왼쪽) · 축 소프트 리밋 (가운데) · 공작물 영점 (오른쪽) — 상자 72 높이, 줄 간격 96 ===== -->
+    <Border Canvas.Left="204" Canvas.Top="496" Width="460" Height="392" Style="{StaticResource Card}" />
+    <TextBlock Canvas.Left="224" Canvas.Top="514" Style="{StaticResource CardTitle}" Text="속도" />
+    <TextBlock Canvas.Left="224" Canvas.Top="608" Style="{StaticResource RowHead}" Text="수동 이동 속도" />
+    <TextBlock Canvas.Left="224" Canvas.Top="630" Style="{StaticResource Caption}" Text="mm/s" />
+    <ironControls:AnalogBox Canvas.Left="444" Canvas.Top="592" Width="200" Height="72" Style="{StaticResource Edit}" Type="Output" KeyPadUse="True" ValueTag="::AsGlobalPV:gEquipment.Input.Parameter.SystemSpeed" DecimalPlace="1" Min="1" Max="200" />
+    <TextBlock Canvas.Left="224" Canvas.Top="704" Style="{StaticResource RowHead}" Text="속도 배율" />
+    <TextBlock Canvas.Left="224" Canvas.Top="726" Style="{StaticResource Caption}" Text="%" />
+    <ironControls:AnalogBox Canvas.Left="444" Canvas.Top="688" Width="200" Height="72" Style="{StaticResource Edit}" Type="Output" KeyPadUse="True" ValueTag="::AsGlobalPV:gEquipment.Input.Parameter.Feedrate" DecimalPlace="0" Min="0" Max="150" />
+    <Border Canvas.Left="676" Canvas.Top="496" Width="548" Height="392" Style="{StaticResource Card}" />
+    <TextBlock Canvas.Left="696" Canvas.Top="514" Style="{StaticResource CardTitle}" Text="축 소프트 리밋" />
+    <TextBlock Canvas.Left="824" Canvas.Top="517" Style="{StaticResource Caption}" Text="mm" />
+    <TextBlock Canvas.Left="776" Canvas.Top="564" Style="{StaticResource ColHead}" Width="210" Text="− 쪽" />
+    <TextBlock Canvas.Left="996" Canvas.Top="564" Style="{StaticResource ColHead}" Width="208" Text="+ 쪽" />
+    <TextBlock Canvas.Left="696" Canvas.Top="616" Style="{StaticResource RowHead}" Text="X축" />
+    <ironControls:AnalogBox Canvas.Left="776" Canvas.Top="592" Width="210" Height="72" Style="{StaticResource Edit}" Type="Output" KeyPadUse="True" ValueTag="::AsGlobalPV:gAxis[0].Input.Parameter.SoftwareLimitsNeg" DecimalPlace="0" Min="-1000" Max="1000" />
+    <ironControls:AnalogBox Canvas.Left="996" Canvas.Top="592" Width="208" Height="72" Style="{StaticResource Edit}" Type="Output" KeyPadUse="True" ValueTag="::AsGlobalPV:gAxis[0].Input.Parameter.SoftwareLimitsPos" DecimalPlace="0" Min="-1000" Max="1000" />
+    <TextBlock Canvas.Left="696" Canvas.Top="712" Style="{StaticResource RowHead}" Text="Y축" />
+    <ironControls:AnalogBox Canvas.Left="776" Canvas.Top="688" Width="210" Height="72" Style="{StaticResource Edit}" Type="Output" KeyPadUse="True" ValueTag="::AsGlobalPV:gAxis[1].Input.Parameter.SoftwareLimitsNeg" DecimalPlace="0" Min="-1000" Max="1000" />
+    <ironControls:AnalogBox Canvas.Left="996" Canvas.Top="688" Width="208" Height="72" Style="{StaticResource Edit}" Type="Output" KeyPadUse="True" ValueTag="::AsGlobalPV:gAxis[1].Input.Parameter.SoftwareLimitsPos" DecimalPlace="0" Min="-1000" Max="1000" />
+    <TextBlock Canvas.Left="696" Canvas.Top="808" Style="{StaticResource RowHead}" Text="Z축" />
+    <ironControls:AnalogBox Canvas.Left="776" Canvas.Top="784" Width="210" Height="72" Style="{StaticResource Edit}" Type="Output" KeyPadUse="True" ValueTag="::AsGlobalPV:gAxis[2].Input.Parameter.SoftwareLimitsNeg" DecimalPlace="0" Min="-1000" Max="1000" />
+    <ironControls:AnalogBox Canvas.Left="996" Canvas.Top="784" Width="208" Height="72" Style="{StaticResource Edit}" Type="Output" KeyPadUse="True" ValueTag="::AsGlobalPV:gAxis[2].Input.Parameter.SoftwareLimitsPos" DecimalPlace="0" Min="-1000" Max="1000" />
+    <cnc:WorkOffsetCard Canvas.Left="1236" Canvas.Top="496" Width="528" Height="392" RowButtons="False" />
+    </Canvas>
+
+    <!-- ===== 탭 [플러그인] — 헤드 고르기(헤드는 하나) · 값 · PLC 지금 · 3D 모델 · M 코드 · 고급, 플러그인 배치(작업현황 4 × 4 칸), + 플러그인 추가. 예전 헤드 구성 · 헤드 테이블을 대신한다 ===== -->
+    <Canvas x:Name="TabPlugin" Canvas.Left="0" Canvas.Top="0" Width="1776" Height="1080" Visibility="Collapsed">
+    <cnc:PluginScreen Canvas.Left="204" Canvas.Top="12" Width="1560" Height="1056" opc:OpcUaNode.ConnectionId="cnc-plc" HeadsFile="Config\Heads.xml" UsageFile="Database\HeadUsage.xml" LayoutFile="Config\PluginLayout.xml" GCodeConfigFile="Config\GCode.xml" CncFolderFile="Config\CncFolder.xml" AccessLevel="10" CurrentActionTag="::AsGlobalPV:gEquipment.Output.Status.CurrentAction" MovingTag="::AsGlobalPV:gEquipment.Output.State.Move" ProgramNameTag="::AsGlobalPV:gEquipment.Input.Parameter.sProgramName" />
+    </Canvas>
+
+    <!-- ===== 탭 [시스템] (체크리스트 4-4) — 장비 이름 기본 「범용 CNC」 ===== -->
+    <Canvas x:Name="TabSystem" Canvas.Left="0" Canvas.Top="0" Width="1776" Height="1080" Visibility="Collapsed">
+    <cnc:SystemSetupCard Canvas.Left="204" Canvas.Top="12" Width="1560" Height="430" access:Access.Level="5" MachineFile="Config\Machine.xml" HeadsFile="Config\Heads.xml" AlarmsFile="alarms.json" Columns="3" InfoColumns="2" />
+    <cnc:MaintenanceCard Canvas.Left="204" Canvas.Top="454" Width="1560" Height="136" opc:OpcUaNode.ConnectionId="cnc-plc" AccessLevel="10" CurrentActionTag="::AsGlobalPV:gEquipment.Output.Status.CurrentAction" MovingTag="::AsGlobalPV:gEquipment.Output.State.Move" />
+    </Canvas>
+
+    <!-- 왼쪽 네비 — 위치 · 속도 / 플러그인 / 시스템, 칸을 누르면 위 세 Canvas 중 하나만 보인다 -->
+    <cnc:ConfigTabBar Canvas.Left="12" Canvas.Top="52" Width="180" Height="208" Vertical="True" Labels="위치 · 속도|플러그인|시스템" Groups="TabPosition|TabPlugin|TabSystem" />
+</Canvas>

@@ -1,0 +1,5 @@
+
+
+PROGRAM _INIT
+	Head := 0;
+END_PROGRAM

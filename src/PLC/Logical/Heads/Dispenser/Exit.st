@@ -1,0 +1,4 @@
+
+PROGRAM _EXIT
+	DO_Dispenser_Start := FALSE;
+END_PROGRAM

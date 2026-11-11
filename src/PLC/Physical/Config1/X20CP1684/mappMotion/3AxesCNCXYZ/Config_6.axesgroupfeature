@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="4.9"?>
+<Configuration>
+  <Element ID="Feature_MFunctions" Type="axesgroupfeature">
+    <Selector ID="Type" Value="MFunctions">
+      <Group ID="MFunction[1]">
+        <Selector ID="IndexType" Value="Range">
+          <Property ID="IndexFrom" Value="40" />
+          <Property ID="IndexTo" Value="49" />
+        </Selector>
+        <Selector ID="Blocking" Value="Disabled" />
+      </Group>
+      <Group ID="MFunction[2]">
+        <Selector ID="IndexType" Value="Range">
+          <Property ID="IndexFrom" Value="50" />
+          <Property ID="IndexTo" Value="59" />
+        </Selector>
+      </Group>
+      <Group ID="MFunction[3]">
+        <Selector ID="IndexType" Value="Range">
+          <Property ID="IndexFrom" Value="60" />
+          <Property ID="IndexTo" Value="69" />
+        </Selector>
+        <Selector ID="Blocking" Value="Disabled" />
+      </Group>
+    </Selector>
+  </Element>
+</Configuration>

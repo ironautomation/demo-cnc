@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 3D 트윈 설정(CncDispense3DControl). 구도는 뷰포트 좌상단 모서리를 두 번 누르면 나오는 설정창에서
+     「현재값 적용」으로 잡고 저장하면 이 파일이 갱신된다(저장 시 이 주석은 사라지므로 커밋 전에 다시 넣는다). 파일이 없거나 깨지면 코드 기본값으로 돈다.
+     카메라 3종의 배율(FitScale) · 대상점 오프셋(Offset*)은 화면 맞춤 범위가 기준이다 — 근접(Dispense) · 갠트리(Gantry)는 장비 본체만,
+     라인(Line)은 곁에 붙인 모듈 장비까지.
+     TableTopZ = 테이블 윗면 높이(씬 mm, 비드를 그리는 높이). ZUp = 기계 Z 가 커질 때 노즐이 올라가면 true —
+     DemoCNC 실장비는 반대로 움직여 false(2026-10-07 현장 확인). ZAtTable = 노즐 끝이 테이블 윗면에 닿는 기계 Z(mm) — 씬 노즐 높이는
+     TableTopZ + (ZAtTable − Z). 레이저만 단 헤드(2026-10-16, replace_head_laser_only.py)는 레이저 출사구가 기준점이라 145(디스펜서 헤드의 니들 끝은 115)
+     — 출사구 높이를 실측하면 두 값을 같이 바꾼다. 노즐이 테이블을 뚫으면 값을 키우고, 떠 보이면 줄인다.
+     BeadWidth/BeadHeight = 공통 자국 단면(mm, 3D 를 직접 그리지 않는 헤드), 6×4 는 너무 두꺼워 3×1.5. 헤드 플러그인이 그리는 자국 · 빔 단면은
+     헤드 줄(Config\Heads.xml TraceWidth · TraceHeight · BeamDiameter, 없으면 플러그인 기본값), 헤드 끝 자리는 헤드 모델의 Tip 이 정한다.
+     Plan* = 헤드 켜짐 예상(계획) 라인. 빈칸이면 비드 단면에 비례해 자동(굵기 = 폭×0.27, 대시 = 폭×1.67, 틈 = 폭×1.0, 띄움 = 높이×0.15).
+     PlanUnit: mm = 원근 있는 점선 튜브(PlanThickness 가 지름 mm), px = 화면 픽셀 실선(PlanThickness 가 px — 1 로 두면 1 px 선, 줌과 무관).
+     PlanDash/PlanGap(mm) 은 mm 모드의 점선 길이·틈, PlanLift(mm) 는 테이블 위로 띄우는 높이. -->
+<View3DSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Dispense>
+    <X>0.568</X>
+    <Y>0.643</Y>
+    <Z>0.514</Z>
+    <FitScale>0.411</FitScale>
+    <OffsetX>-1.2</OffsetX>
+    <OffsetY>9.9</OffsetY>
+    <OffsetZ>-7.1</OffsetZ>
+  </Dispense>
+  <Gantry>
+    <X>0.617</X>
+    <Y>0.639</Y>
+    <Z>0.46</Z>
+    <FitScale>1.009</FitScale>
+    <OffsetX>195.3</OffsetX>
+    <OffsetY>47.5</OffsetY>
+    <OffsetZ>-44</OffsetZ>
+  </Gantry>
+  <Line>
+    <X>0.484</X>
+    <Y>0.716</Y>
+    <Z>-0.504</Z>
+    <FitScale>0.618</FitScale>
+    <OffsetX>-141</OffsetX>
+    <OffsetY>11.8</OffsetY>
+    <OffsetZ>94</OffsetZ>
+  </Line>
+  <ShowFrameRate>false</ShowFrameRate>
+  <ShowCameraInfo>false</ShowCameraInfo>
+  <TableTopZ>-145</TableTopZ>
+  <ZUp>false</ZUp>
+  <ZAtTable>145</ZAtTable>
+  <BeadWidth>3</BeadWidth>
+  <BeadHeight>1.5</BeadHeight>
+  <LaserWidth>1.6</LaserWidth>
+  <LaserHeight>1.2</LaserHeight>
+  <BeamDiameter>1.2</BeamDiameter>
+  <LaserOffsetX />
+  <LaserOffsetY />
+  <LaserOffsetZ />
+  <PlanUnit>mm</PlanUnit>
+  <PlanThickness />
+  <PlanDash />
+  <PlanGap />
+  <PlanLift />
+</View3DSettings>

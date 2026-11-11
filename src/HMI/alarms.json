@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "alarms": [
+    {
+      "exceptionConditionID": 90,
+      "exMessage": "비상정지 리셋 필요 — 비상정지로 축이 멈추고 서보가 꺼졌습니다.",
+      "exEnabled": true,
+      "exType": 0,
+      "exActiveGround": "INPUT",
+      "exCondition": "True",
+      "exActiveElement": "::AsGlobalPV:gEquipment.Output.Status.EmergencyStop",
+      "exDefinition": "원인: 핸드휠 비상정지 버튼(DI_MPG_Jog_EMS1)이 눌렸다. PLC 가 가공·수동 이동을 멈추고, 축이 서면(늦어도 2초 뒤) 서보를 끄며 토출·레이저도 끈다. 버튼을 풀어도 이 상태는 남고, 그동안 PLC 는 정지·리셋·서보 OFF 명령만 받는다. 조치: 원인을 확인하고 버튼을 돌려 푼 뒤 작업현황의 리셋을 누른다(버튼이 눌린 채 리셋하면 풀리지 않는다). 풀리면 서보 ON 을 누른다(원점이 없으면 원점 복귀까지 이어진다). 소프트웨어 정지이며 안전 회로가 아니다.",
+      "exReportEnabled": true
+    },
+    {
+      "exceptionConditionID": 100,
+      "exMessage": "X축 알람 — 드라이브가 에러로 멈췄습니다.",
+      "exEnabled": true,
+      "exType": 0,
+      "exActiveGround": "INPUT",
+      "exCondition": "True",
+      "exActiveElement": "::AsGlobalPV:gAxis[0].Output.State.Error",
+      "exDefinition": "원인: X축 서보(Yaskawa Σ-X) 에러 정지 — 에러 코드는 gAxis[0].Output.State.ErrorID. 조치: 원인을 없앤 뒤 작업현황의 리셋을 누르고 서보 ON·원점 복귀를 다시 한다.",
+      "exReportEnabled": true
+    },
+    {
+      "exceptionConditionID": 101,
+      "exMessage": "Y축 알람 — 드라이브가 에러로 멈췄습니다.",
+      "exEnabled": true,
+      "exType": 0,
+      "exActiveGround": "INPUT",
+      "exCondition": "True",
+      "exActiveElement": "::AsGlobalPV:gAxis[1].Output.State.Error",
+      "exDefinition": "원인: Y축 서보 에러 정지 — 에러 코드는 gAxis[1].Output.State.ErrorID. 조치: 원인을 없앤 뒤 리셋 → 서보 ON·원점 복귀.",
+      "exReportEnabled": true
+    },
+    {
+      "exceptionConditionID": 102,
+      "exMessage": "Z축 알람 — 드라이브가 에러로 멈췄습니다.",
+      "exEnabled": true,
+      "exType": 0,
+      "exActiveGround": "INPUT",
+      "exCondition": "True",
+      "exActiveElement": "::AsGlobalPV:gAxis[2].Output.State.Error",
+      "exDefinition": "원인: Z축 서보 에러 정지 — 에러 코드는 gAxis[2].Output.State.ErrorID. 조치: 노즐 주변을 확인하고 원인을 없앤 뒤 리셋 → 서보 ON·원점 복귀.",
+      "exReportEnabled": true
+    },
+    {
+      "exceptionConditionID": 103,
+      "exMessage": "CNC 에러 — 축 그룹(CNC)이 에러로 멈췄습니다.",
+      "exEnabled": true,
+      "exType": 0,
+      "exActiveGround": "INPUT",
+      "exCondition": "True",
+      "exActiveElement": "::AsGlobalPV:gEquipment.Output.Status.Error",
+      "exDefinition": "원인: CNC 축 그룹(MpCnc3Axis) 에러 — 가공 파일 실행 오류, 소프트 리밋 밖 지령, 축 에러(X/Y/Z축 알람이 같이 떠 있으면 그 축이 원인), 서보 켜기·원점 복귀 실패 등. 에러 번호는 gEquipment.Output.Status.StatusID(0 이 아니면 그 번호를 B&R Automation Help 에서 찾는다). 조치: 원인을 없앤 뒤 작업현황의 리셋을 누른다. 리셋은 CNC·축 에러를 지우지만 서보는 켜지 않는다(3초 안에 안 지워지면 원인이 남아 있다). 이어서 서보 ON 을 누르고 필요하면 원점 복귀를 다시 한다.",
+      "exReportEnabled": true
+    },
+    {
+      "exceptionConditionID": 110,
+      "exMessage": "X축 드라이브 경고 — 드라이브가 경고를 냈습니다(멈추지는 않았습니다).",
+      "exEnabled": true,
+      "exType": 1,
+      "exActiveGround": "INPUT",
+      "exCondition": "True",
+      "exActiveElement": "::AsGlobalPV:gDriveDiag[0].WarningAlarm",
+      "exDefinition": "원인: X축 서보 드라이브(Yaskawa Σ-X)의 경고 비트(DS402 상태 워드 bit 7, gDriveDiag[0].Warning)가 0.5초 넘게 켜졌다 — 과부하 · 온도 · 전압 등이 경고 수준에 왔다는 뜻이고 축은 그대로 움직인다. 경고가 꺼져도 2초 동안 남는다(PLC 가 반응하지 않는 표시 전용 신호). 조치: 같은 축에 정지 알람이 이어지지 않는지 보고, 되풀이되면 드라이브 화면 · SigmaWin 으로 경고 번호를 확인해 원인(부하 · 냉각 · 배선)을 찾는다.",
+      "exReportEnabled": true
+    },
+    {
+      "exceptionConditionID": 111,
+      "exMessage": "Y축 드라이브 경고 — 드라이브가 경고를 냈습니다(멈추지는 않았습니다).",
+      "exEnabled": true,
+      "exType": 1,
+      "exActiveGround": "INPUT",
+      "exCondition": "True",
+      "exActiveElement": "::AsGlobalPV:gDriveDiag[1].WarningAlarm",
+      "exDefinition": "원인: Y축 서보 드라이브(Yaskawa Σ-X)의 경고 비트(DS402 상태 워드 bit 7, gDriveDiag[1].Warning)가 0.5초 넘게 켜졌다 — 과부하 · 온도 · 전압 등이 경고 수준에 왔다는 뜻이고 축은 그대로 움직인다. 경고가 꺼져도 2초 동안 남는다(PLC 가 반응하지 않는 표시 전용 신호). 조치: 같은 축에 정지 알람이 이어지지 않는지 보고, 되풀이되면 드라이브 화면 · SigmaWin 으로 경고 번호를 확인해 원인(부하 · 냉각 · 배선)을 찾는다.",
+      "exReportEnabled": true
+    },
+    {
+      "exceptionConditionID": 112,
+      "exMessage": "Z축 드라이브 경고 — 드라이브가 경고를 냈습니다(멈추지는 않았습니다).",
+      "exEnabled": true,
+      "exType": 1,
+      "exActiveGround": "INPUT",
+      "exCondition": "True",
+      "exActiveElement": "::AsGlobalPV:gDriveDiag[2].WarningAlarm",
+      "exDefinition": "원인: Z축 서보 드라이브(Yaskawa Σ-X)의 경고 비트(DS402 상태 워드 bit 7, gDriveDiag[2].Warning)가 0.5초 넘게 켜졌다 — 과부하 · 온도 · 전압 등이 경고 수준에 왔다는 뜻이고 축은 그대로 움직인다. 경고가 꺼져도 2초 동안 남는다(PLC 가 반응하지 않는 표시 전용 신호). 조치: 같은 축에 정지 알람이 이어지지 않는지 보고, 되풀이되면 드라이브 화면 · SigmaWin 으로 경고 번호를 확인해 원인(부하 · 냉각 · 배선)을 찾는다.",
+      "exReportEnabled": true
+    }
+  ]
+}

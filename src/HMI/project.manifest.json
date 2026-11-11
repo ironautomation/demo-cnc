@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "minRuntimeVersion": "1.0.0",
+  "screen": {
+    "id": "0dfbe028-73e4-4bbb-b714-2443305ad88e",
+    "name": "IronHMI_DemoCNC",
+    "width": 1920,
+    "height": 1080
+  },
+  "frame": {
+    "relativePath": "Frame.xaml"
+  },
+  "communication": {
+    "relativePath": "",
+    "defaultConnectionId": "cnc-plc",
+    "clients": [
+      {
+        "use": true,
+        "id": "cnc-plc",
+        "name": "DemoCNC PLC",
+        "endpointUrl": "opc.tcp://127.0.0.1:4840",
+        "namespaceIndex": 5,
+        "useSecurity": false,
+        "subscriptionPublishingInterval": 50
+      }
+    ]
+  },
+  "regions": {
+    "NavRegion": {
+      "x": 1776,
+      "y": 0,
+      "w": 144,
+      "h": 1080,
+      "sizeLocked": false
+    },
+    "ContentRegion": {
+      "x": 0,
+      "y": 0,
+      "w": 1776,
+      "h": 1080,
+      "sizeLocked": false
+    }
+  },
+  "panels": [
+    {
+      "id": "631bf259-496b-4f2b-af1d-37e2c725c3ea",
+      "name": "LayoutRail",
+      "kind": "nav",
+      "regionId": "NavRegion",
+      "relativePath": "Screen/Layout/LayoutRail.xaml",
+      "default": false,
+      "createdBy": "manual",
+      "edited": true
+    },
+    {
+      "id": "847b4098-12e4-4652-b834-c5e32bd3520d",
+      "name": "Panel_Job",
+      "kind": "content",
+      "regionId": "ContentRegion",
+      "relativePath": "Screen/Panel/Panel_Job.xaml",
+      "default": true,
+      "createdBy": "manual",
+      "edited": true
+    },
+    {
+      "id": "f5f2a864-e80e-4ed2-afcb-1454a35f6e82",
+      "name": "Panel_IO",
+      "kind": "content",
+      "regionId": "ContentRegion",
+      "relativePath": "Screen/Panel/Panel_IO.xaml",
+      "default": false,
+      "createdBy": "manual",
+      "edited": true
+    },
+    {
+      "id": "add25eb8-6892-4040-a338-dfcd819ac723",
+      "name": "Panel_Config",
+      "kind": "content",
+      "regionId": "ContentRegion",
+      "relativePath": "Screen/Panel/Panel_Config.xaml",
+      "default": false,
+      "createdBy": "manual",
+      "edited": true
+    },
+    {
+      "id": "d40f4e5c-bbfc-4115-940c-e4f69912402d",
+      "name": "Panel_Record",
+      "kind": "content",
+      "regionId": "ContentRegion",
+      "relativePath": "Screen/Panel/Panel_Record.xaml",
+      "default": false,
+      "createdBy": "manual",
+      "edited": true
+    },
+    {
+      "id": "d7e849c1-963f-4693-9df1-e577153e4d31",
+      "name": "Panel_History",
+      "kind": "content",
+      "regionId": "ContentRegion",
+      "relativePath": "Screen/Panel/Panel_History.xaml",
+      "default": false,
+      "createdBy": "manual",
+      "edited": true
+    }
+  ],
+  "navButtons": [],
+  "images": {
+    "basePath": "Images"
+  },
+  "flows": {
+    "basePath": "Flows"
+  },
+  "config": {
+    "window": {
+      "style": "None"
+    },
+    "keyPad": {
+      "mode": "Auto",
+      "use": true
+    },
+    "requireLoginForContent": true
+  },
+  "xmlnsCatalog": [
+    {
+      "prefix": "opc",
+      "namespace": "clr-namespace:IronHMI.OpcUaBridge;assembly=IronHMI.OpcUaBridge",
+      "assembly": "IronHMI.OpcUaBridge"
+    },
+    {
+      "prefix": "action",
+      "namespace": "clr-namespace:IronHMI.Actions;assembly=IronHMI.Common",
+      "assembly": "IronHMI.Common"
+    },
+    {
+      "prefix": "access",
+      "namespace": "clr-namespace:IronHMI.Controls.Abstractions;assembly=IronHMI.Controls.Abstractions",
+      "assembly": "IronHMI.Controls.Abstractions"
+    }
+  ]
+}

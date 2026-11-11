@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExternalHardware>
+  <Modules>
+    <Module ModuleID="FBD.Hilscher.ECATGenSlaveDTM.SGDXT-xxxxA0x CoE Drive V5.1" Version="5.1" OrderNumber="SGDXT-xxxxA0x CoE Drive V5.1">
+      <SourceFile OriginalFile="Yaskawa_SGDXT-xxxxA0x.xml" TranslationFile="INKJ8Z2T.ext" />
+    </Module>
+  </Modules>
+</ExternalHardware>

@@ -1,0 +1,212 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="4.9"?>
+<Configuration>
+  <Element ID="PureVAxCfg_X" Type="purevaxcfg">
+    <Group ID="PureVAxis">
+      <Property ID="AxisReference" Value="gAxis_X" />
+      <Group ID="Homing">
+        <Selector ID="Mode" Value="SwitchGate">
+          <Property ID="SwitchEdge" Value="Negative" />
+          <Property ID="StartDirection" Value="Negative" />
+        </Selector>
+      </Group>
+      <Selector ID="GeneralPurposeAxisInterface" Value="DS402CSP">
+        <Group ID="MechanicalElements">
+          <Group ID="RotaryToLinearTransformation">
+            <Property ID="ReferenceDistance" Value="10" />
+          </Group>
+        </Group>
+        <Group ID="EncoderSettings">
+          <Property ID="IncrementsPerRevolution" Value="1048576" />
+        </Group>
+        <Group ID="PositionActualValue">
+          <Selector ID="Source" Value="Variable">
+            <Property ID="PVMapping" Value="::gDS402_X.ActualPosition" />
+          </Selector>
+        </Group>
+        <Group ID="DigitalInputs">
+          <Group ID="HomingSwitch">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_X.DigitalInputs.HomingSwitch" />
+            </Selector>
+          </Group>
+          <Group ID="PositiveLimitSwitch">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_X.DigitalInputs.PositiveLimitSwitch" />
+            </Selector>
+            <Property ID="Level" Value="Low" />
+          </Group>
+          <Group ID="NegativeLimitSwitch">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_X.DigitalInputs.NegativeLimitSwitch" />
+            </Selector>
+            <Property ID="Level" Value="Low" />
+          </Group>
+        </Group>
+        <Group ID="StatusInputs">
+          <Group ID="StatusWord">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_X.StatusWord" />
+            </Selector>
+          </Group>
+          <Group ID="ErrorCode">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_X.ErrorCode" />
+            </Selector>
+          </Group>
+        </Group>
+        <Group ID="ControlOutputs">
+          <Selector ID="ControlWord">
+            <Selector ID="Destination">
+              <Property ID="PVMapping" Value="::gDS402_X.ControlWord" />
+            </Selector>
+          </Selector>
+          <Selector ID="TargetPosition">
+            <Selector ID="Destination">
+              <Property ID="PVmapping" Value="::gDS402_X.TargetPosition" />
+            </Selector>
+          </Selector>
+        </Group>
+      </Selector>
+    </Group>
+  </Element>
+  <Element ID="PureVAxCfg_Y" Type="purevaxcfg">
+    <Group ID="PureVAxis">
+      <Property ID="AxisReference" Value="gAxis_Y" />
+      <Group ID="Homing">
+        <Selector ID="Mode" Value="SwitchGate">
+          <Property ID="Position" Value="0" />
+          <Property ID="SwitchEdge" Value="Negative" />
+          <Property ID="StartDirection" Value="Negative" />
+        </Selector>
+      </Group>
+      <Selector ID="GeneralPurposeAxisInterface" Value="DS402CSP">
+        <Group ID="MechanicalElements">
+          <Group ID="RotaryToLinearTransformation">
+            <Property ID="ReferenceDistance" Value="10" />
+          </Group>
+        </Group>
+        <Group ID="EncoderSettings">
+          <Property ID="IncrementsPerRevolution" Value="1048576" />
+        </Group>
+        <Group ID="PositionActualValue">
+          <Selector ID="Source" Value="Variable">
+            <Property ID="PVMapping" Value="::gDS402_Y.ActualPosition" />
+          </Selector>
+        </Group>
+        <Group ID="DigitalInputs">
+          <Group ID="HomingSwitch">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_Y.DigitalInputs.HomingSwitch" />
+            </Selector>
+          </Group>
+          <Group ID="PositiveLimitSwitch">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_Y.DigitalInputs.PositiveLimitSwitch" />
+            </Selector>
+            <Property ID="Level" Value="Low" />
+          </Group>
+          <Group ID="NegativeLimitSwitch">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_Y.DigitalInputs.NegativeLimitSwitch" />
+            </Selector>
+            <Property ID="Level" Value="Low" />
+          </Group>
+        </Group>
+        <Group ID="StatusInputs">
+          <Group ID="StatusWord">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_Y.StatusWord" />
+            </Selector>
+          </Group>
+          <Group ID="ErrorCode">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_Y.ErrorCode" />
+            </Selector>
+          </Group>
+        </Group>
+        <Group ID="ControlOutputs">
+          <Selector ID="ControlWord">
+            <Selector ID="Destination">
+              <Property ID="PVMapping" Value="::gDS402_Y.ControlWord" />
+            </Selector>
+          </Selector>
+          <Selector ID="TargetPosition">
+            <Selector ID="Destination">
+              <Property ID="PVmapping" Value="::gDS402_Y.TargetPosition" />
+            </Selector>
+          </Selector>
+        </Group>
+      </Selector>
+    </Group>
+  </Element>
+  <Element ID="PureVAxCfg_Z" Type="purevaxcfg">
+    <Group ID="PureVAxis">
+      <Property ID="AxisReference" Value="gAxis_Z" />
+      <Group ID="Homing">
+        <Selector ID="Mode" Value="SwitchGate">
+          <Property ID="SwitchEdge" Value="Negative" />
+          <Property ID="StartDirection" Value="Negative" />
+        </Selector>
+      </Group>
+      <Selector ID="GeneralPurposeAxisInterface" Value="DS402CSP">
+        <Group ID="MechanicalElements">
+          <Group ID="RotaryToLinearTransformation">
+            <Property ID="ReferenceDistance" Value="10" />
+          </Group>
+        </Group>
+        <Group ID="EncoderSettings">
+          <Property ID="IncrementsPerRevolution" Value="1048576" />
+        </Group>
+        <Group ID="PositionActualValue">
+          <Selector ID="Source" Value="Variable">
+            <Property ID="PVMapping" Value="::gDS402_Z.ActualPosition" />
+          </Selector>
+        </Group>
+        <Group ID="DigitalInputs">
+          <Group ID="HomingSwitch">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_Z.DigitalInputs.HomingSwitch" />
+            </Selector>
+          </Group>
+          <Group ID="PositiveLimitSwitch">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_Z.DigitalInputs.PositiveLimitSwitch" />
+            </Selector>
+            <Property ID="Level" Value="Low" />
+          </Group>
+          <Group ID="NegativeLimitSwitch">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_Z.DigitalInputs.NegativeLimitSwitch" />
+            </Selector>
+            <Property ID="Level" Value="Low" />
+          </Group>
+        </Group>
+        <Group ID="StatusInputs">
+          <Group ID="StatusWord">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_Z.StatusWord" />
+            </Selector>
+          </Group>
+          <Group ID="ErrorCode">
+            <Selector ID="Source" Value="InputPV">
+              <Property ID="PVmapping" Value="::gDS402_Z.ErrorCode" />
+            </Selector>
+          </Group>
+        </Group>
+        <Group ID="ControlOutputs">
+          <Selector ID="ControlWord">
+            <Selector ID="Destination">
+              <Property ID="PVMapping" Value="::gDS402_Z.ControlWord" />
+            </Selector>
+          </Selector>
+          <Selector ID="TargetPosition">
+            <Selector ID="Destination">
+              <Property ID="PVmapping" Value="::gDS402_Z.TargetPosition" />
+            </Selector>
+          </Selector>
+        </Group>
+      </Selector>
+    </Group>
+  </Element>
+</Configuration>

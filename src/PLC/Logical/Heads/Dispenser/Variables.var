@@ -1,0 +1,7 @@
+VAR
+	toAuto : R_TRIG;
+	toManual : F_TRIG;
+	command : BOOL; (*discharge command of the current mode*)
+	commandOn : R_TRIG;
+	commandOff : F_TRIG;
+END_VAR

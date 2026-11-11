@@ -1,0 +1,36 @@
+<Canvas
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:opc="clr-namespace:IronHMI.OpcUaBridge;assembly=IronHMI.OpcUaBridge"
+    xmlns:action="clr-namespace:IronHMI.Actions;assembly=IronHMI.Common"
+    xmlns:access="clr-namespace:IronHMI.Controls.Abstractions;assembly=IronHMI.Controls.Abstractions"
+    xmlns:cnc="clr-namespace:CncControls;assembly=CncControls"
+    Width="1776"
+    Height="1080"
+    ClipToBounds="True"
+    Background="{DynamicResource Surface1}">
+    <!-- 작업이력 — 작업현황의 CncJobRecorder 가 운전 1회마다 Database\jobhistory.db 에 남긴 줄. 작업별 / 프로그램별 합계 두 보기,
+         날짜 범위 조회와 CSV 저장. (작업기록과 같은 HistoryViewControl, 소스만 Job/JobTotal)
+         작업별 보기에서 행을 누르면 그 작업의 블랙박스 재생 층이 오른쪽에서 열린다(3D · 타임라인 · 축/토크 · 이벤트 · 표 · 그래프, 가로 배치).
+         「재생」 열 ● = 재생 데이터가 있는 작업. TorqueWarnLevel(Nm) 은 실장비 토크 수준을 본 뒤 정한다(0 = 경고 안 봄).
+         여백: HistoryViewControl 안쪽 여백(좌우 16 · 위아래 14)은 HistoryViewControl.xaml 에 고정이고 속성으로 열려 있지 않다. 다른 화면과
+         같은 바깥 여백 12 를 만들려고 컨트롤을 (-4,-2) 1784×1084 에 두고 화면 Canvas 를 ClipToBounds 로 자른다. 잘리는 바깥 4/2px 는
+         컨트롤 배경(Surface1, 화면 배경과 같은 색)뿐이다. 그래서 내용은 x 12..1764, y 12..1068.
+         컨트롤 쪽 여백을 12 로 고치면 이 위치를 (0,0) 1776×1080 으로 되돌린다. -->
+    <cnc:HistoryViewControl
+        Canvas.Left="-4" Canvas.Top="-2" Width="1784" Height="1084"
+        Title="작업 이력"
+        ToggleStyle="Buttons"
+        PrimaryLabel="작업별"
+        SecondaryLabel="프로그램별 합계"
+        PrimaryColumns="번호:60;시작:180;프로그램:*;연속:110;소요:100;라인:100;결과:70;드라이런:80;속도 평균/최고:150;작업자:90;재생:60"
+        SecondaryColumns="프로그램:*;횟수:90;완료:90;총 소요:140;평균 소요:140"
+        EnablePanelFilter="False"
+        PrimarySource="Job"
+        SecondarySource="JobTotal"
+        JobDbPath="Database\jobhistory.db"
+        ReplayModelPath="Models\cnc_gantry.glb"
+        ReplayViewSettingsFile="Config\View3D.xml"
+        GCodeConfigFile="Config\GCode.xml"
+        TorqueWarnLevel="0" />
+</Canvas>

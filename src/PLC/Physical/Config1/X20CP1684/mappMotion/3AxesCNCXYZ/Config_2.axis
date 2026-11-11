@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?AutomationStudio FileVersion="4.9"?>
+<Configuration>
+  <Element ID="gAxis_X" Type="axis">
+    <Selector ID="BaseType" Value="LinearBounded">
+      <Property ID="MeasurementResolution" Value="0.001" />
+      <Property ID="CountDirection" Value="Inverse" />
+    </Selector>
+    <Selector ID="MovementLimits">
+      <Group ID="Position">
+        <Property ID="LowerLimit" Value="-5" />
+        <Property ID="UpperLimit" Value="450" />
+      </Group>
+      <Selector ID="Velocity">
+        <Property ID="Velocity" Value="200" />
+      </Selector>
+      <Selector ID="Acceleration">
+        <Property ID="Acceleration" Value="500.0" />
+      </Selector>
+      <Selector ID="Deceleration">
+        <Property ID="Deceleration" Value="500.0" />
+      </Selector>
+    </Selector>
+  </Element>
+  <Element ID="gAxis_Y" Type="axis">
+    <Selector ID="BaseType" Value="LinearBounded">
+      <Property ID="MeasurementResolution" Value="0.001" />
+      <Property ID="CountDirection" Value="Inverse" />
+    </Selector>
+    <Selector ID="MovementLimits">
+      <Group ID="Position">
+        <Property ID="LowerLimit" Value="-5" />
+        <Property ID="UpperLimit" Value="430" />
+      </Group>
+      <Selector ID="Velocity">
+        <Property ID="Velocity" Value="200" />
+      </Selector>
+      <Selector ID="Acceleration">
+        <Property ID="Acceleration" Value="500.0" />
+      </Selector>
+      <Selector ID="Deceleration">
+        <Property ID="Deceleration" Value="500.0" />
+      </Selector>
+    </Selector>
+  </Element>
+  <Element ID="gAxis_Z" Type="axis">
+    <Selector ID="BaseType" Value="LinearBounded">
+      <Property ID="MeasurementResolution" Value="0.001" />
+    </Selector>
+    <Selector ID="MovementLimits">
+      <Group ID="Position">
+        <Property ID="LowerLimit" Value="-5" />
+        <Property ID="UpperLimit" Value="145" />
+      </Group>
+      <Selector ID="Velocity">
+        <Property ID="Velocity" Value="200" />
+      </Selector>
+      <Selector ID="Acceleration">
+        <Property ID="Acceleration" Value="500.0" />
+      </Selector>
+      <Selector ID="Deceleration">
+        <Property ID="Deceleration" Value="500.0" />
+      </Selector>
+    </Selector>
+  </Element>
+</Configuration>

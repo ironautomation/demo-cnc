@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 기본 포함 플러그인 — HMI 와 같이 나가는 플러그인 DLL(레포에 있는 파일). 「+ 플러그인 추가」를 거치지 않고 시작할 때 올린다(해시 없음).
+     같은 Id 가 Config\Plugins.xml <Installed> 에 있으면(현장에서 바꾸기) 그것이 먼저다. 쓰는 헤드 · 모듈 켜고 끄기는 구성설정 › 플러그인(Plugins.xml <Head> · <Module>).
+     헤드 · 모듈 플러그인은 계약 DLL(CncControls.Abstractions)만 참조한다 — HMI 코드에 그 헤드 · 장비 이름이 없다. -->
+<Bundled>
+  <Plugin Id="dispenser" File="Plugins\dispenser\DispenserHead.dll" />
+  <Plugin Id="laser" File="Plugins\laser\LaserHead.dll" />
+</Bundled>

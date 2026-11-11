@@ -1,0 +1,132 @@
+(*Drive adapter - motor / drive specific.
+  On a motor or drive change only this block, IoMap.iom, the mappMotion axis configs and the DTM change.
+  Program logic uses only the mapp axis references gAxis_X/Y/Z and the axes group gCncXYZ.*)
+VAR
+	gDS402_X : McPureVAxDS402CspAdapterPvType;
+	gDS402_Y : McPureVAxDS402CspAdapterPvType;
+	gDS402_Z : McPureVAxDS402CspAdapterPvType;
+END_VAR
+VAR RETAIN
+	gEquipment : Equip_Type;
+	gAxis : ARRAY[0..2] OF AxesInterface_Type;
+END_VAR
+VAR
+	gDispenser : Dispenser_Type;
+	gLaser : Laser_Type;
+END_VAR
+(*Axis index of gAxis, gDriveDiag and the per-axis FB arrays*)
+VAR CONSTANT
+	AX_X : USINT := 0;
+	AX_Y : USINT := 1;
+	AX_Z : USINT := 2;
+	AX_LAST : USINT := 2; (*highest axis index : FOR i := 0 TO AX_LAST*)
+END_VAR
+(*Drive diagnosis for the HMI - read only (AxisManual overwrites it every cycle), not RETAIN, index AX_X/AX_Y/AX_Z as gAxis*)
+VAR
+	gDriveDiag : ARRAY[0..2] OF DriveDiag_Type;
+END_VAR
+(*HMI jog heartbeat - not RETAIN*)
+VAR
+	gJogAlive : UINT := 0; (*the HMI changes it every 0.1 s while it jogs; AxisManual stops the jog when it stands still for 0.5 s*)
+END_VAR
+(*Position move result for the HMI - not RETAIN (gEquipment is RETAIN and keeps its layout)*)
+VAR
+	gManualMoveResult : ManualMoveResult_Type; (*result of the last Input.Command.ManualMove request, written by AxisManual*)
+END_VAR
+(*Heads - one head on the machine (HMI plugin structure). Head number = PlcId of the HMI head plugin*)
+VAR CONSTANT
+	HEAD_DISPENSER : USINT := 1; (*dispenser : M41 / M42 discharge on / off, M44 / M45 discharge delay flag, Dispenser task*)
+	HEAD_LASER : USINT := 2; (*PWM laser : M61 / M62 emission on / off, Laser task*)
+END_VAR
+(*Heads this PLC program has - not RETAIN, read by the HMI*)
+VAR
+	gHeadSupport : UDINT := 0; (*bit n = head n (HEAD_ constants) has its M functions and outputs here. Fixed, set by Main every cycle. The HMI does not offer a head without its bit*)
+END_VAR
+(*Active head - written by the HMI, not RETAIN. Not in gEquipment : a new field would change the RETAIN structure*)
+VAR
+	gActiveHead : USINT := 0; (*head selected on the HMI (HEAD_ constant, the plugin PlcId). Only its M functions and manual on are taken : an M function of another head stops the program, a manual on of another head is dropped (Main act_HeadCheck). 0 = not known yet (PLC restart until the HMI writes it) : no check*)
+	gHeadRefused : USINT := 0; (*head whose M function or manual on was refused last because it is not gActiveHead (HEAD_ constants), 0 = none. Cleared when the next run starts or by RESET*)
+END_VAR
+(*CNC program run options from the HMI (single step, M01 stop, start at line) - not RETAIN : off after every power-up*)
+VAR
+	gCncRun : CncRun_Type;
+END_VAR
+(*Setting Variable*)
+VAR RETAIN
+	SlowMoveVelocity : DINT := 10;
+	SlowMoveLength : DINT := 100;
+END_VAR
+(*Monitor*)
+VAR
+	C_CurrentLine : DINT := 0; (*line of the running CNC program, from MpCnc3Axis ProgramMonitor*)
+	C_OverallRuntime : LREAL := 0.0; (*execution time of the running CNC program [s], from MpCnc3Axis ProgramMonitor - counts from the start (file load included) and holds after the end*)
+	C_MovementRuntime : LREAL := 0.0; (*movement time of the running CNC program [s], from MpCnc3Axis ProgramMonitor - file load not included*)
+	Torque_X : REAL := 0.0;
+	Torque_Y : REAL := 0.0;
+	Torque_Z : REAL := 0.0;
+END_VAR
+(*CNC program variables - written by the program through an alias of the axes group program feature (Config_4, path synchronous)*)
+VAR
+	C_LaserPower : REAL := -1.0; (*LaserPower = <%> in the program; < 0 = not set (gLaser.Input.Parameter.Power), reset at program end*)
+END_VAR
+(*Teach positions 1..4 [mm, machine coordinates] - read by CNC programs as TP1_1 .. TP4_3 (aliases in Config_4, _1 = X, _2 = Y, _3 = Z : a name
+  must not contain X/Y/Z/F after its first letter - an address letter inside an expression
+  splits the expression, e.g. 'X=2930-DoubleBeadY=40'), e.g. in the init program
+  (Input.Parameter.sInitProgram) 'G00 X=TP1_1 Y=TP1_2' to go there, or 'G92 X=TP4_1 Y=TP4_2' (G92 = absolute zero offset : teach position 4 becomes the program origin). The HMI owns the values (Config\TeachPositions.xml, slot = order
+  in Config\Machine.xml) and writes them here whenever they differ*)
+VAR RETAIN
+	C_TP1_1 : LREAL := 0.0;
+	C_TP1_2 : LREAL := 0.0;
+	C_TP1_3 : LREAL := 0.0;
+	C_TP2_1 : LREAL := 0.0;
+	C_TP2_2 : LREAL := 0.0;
+	C_TP2_3 : LREAL := 0.0;
+	C_TP3_1 : LREAL := 0.0;
+	C_TP3_2 : LREAL := 0.0;
+	C_TP3_3 : LREAL := 0.0;
+	C_TP4_1 : LREAL := 0.0;
+	C_TP4_2 : LREAL := 0.0;
+	C_TP4_3 : LREAL := 0.0;
+END_VAR
+(*Z reference measurement (CncCommand E_ACT_MEASURE_Z, Main Action_ZRef.st) - RETAIN on its own (sensor position), gEquipment is
+  not changed. The HMI writes Input (sensor position, search range) and reads Output (MeasuredZ, Done, ErrorId)*)
+VAR RETAIN
+	gZRef : ZRef_Type;
+END_VAR
+(*Work offsets G54..G57 (Main Action_WorkOffset.st) - RETAIN on its own, gEquipment is not changed. The HMI writes Input.Parameter
+  (machine position of the program origin per offset, active offset) and sets Input.Command.Apply while the CNC is idle; the values
+  in effect are Output.Offset / Output.Active. All 0 (the default) = program coordinates are machine coordinates*)
+VAR RETAIN
+	gWorkOffset : WorkOffset_Type;
+END_VAR
+(*Head (tool) offsets (Main Action_HeadOffset.st) - RETAIN on its own, gEquipment is not changed. The HMI writes Input.Parameter
+  (offset per head from the reference head tip, mounted head) and sets Input.Command.Apply while the CNC is idle; the values in
+  effect are Output.Offset / Output.ActiveHead. ActiveHead 0 or offset 0 (the default) = no shift*)
+VAR RETAIN
+	gHeadOffset : HeadOffset_Type;
+END_VAR
+(*I/O - wired signals only. Axis limit/home switches go straight to gDS402_* in IoMap.iom*)
+VAR
+	DI_Auto : BOOL := FALSE;
+	DI_MPG_AxisX : BOOL := FALSE;
+	DI_MPG_AxisY : BOOL := FALSE;
+	DI_MPG_AxisZ : BOOL := FALSE;
+	DI_MPG_X1 : BOOL := FALSE;
+	DI_MPG_X10 : BOOL := FALSE;
+	DI_MPG_X100 : BOOL := FALSE;
+	DI_MPG_Jog_EMS1 : BOOL := FALSE;
+	DI_MPG_Jog_Enable : BOOL := FALSE;
+	DO_Dispenser_Start : BOOL := FALSE;
+	DO_Laser_Power : BOOL := FALSE; (*X20DO8331 DO02 - on/off laser output, not used by the PWM laser : held FALSE*)
+	PWM_Laser_Duty : INT := 0; (*X20DO4332-1 PwmOutput01 : 0..32767 = 0..100 % of the period (power and on/off)*)
+	PWM_Laser_Period : UINT := 1000; (*X20DO4332-1 PwmPeriode [us]*)
+END_VAR
+(*Z reference touch sensor - NOT wired yet : no channel in Hardware.hw / IoMap.iom. Map it in IoMap.iom once the sensor is wired
+  (TRUE = touched : an NC sensor needs a NOT where Main reads it). Until then it stays FALSE and a measurement ends at MaxZ (ErrorId 3)*)
+VAR
+	DI_ZRef_Sensor : BOOL := FALSE;
+END_VAR
+(*Laser emitting (on and power > 0) - not wired, for the HMI (head lamp, PLC presence)*)
+VAR
+	DO_Laser_On : BOOL := FALSE;
+END_VAR

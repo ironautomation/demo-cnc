@@ -1,0 +1,10 @@
+VAR
+	deviceName : STRING[20] := 'CNC_PrgDir'; (*file device of the CNC programs (FileDevice of the axes group program feature, Config_4)*)
+	shareParam : STRING[200] := '/SIP=192.0.2.20 /PROTOCOL=cifs /SHARE=GCode /USER=Controller /PASSWORD=change-me'; (*network share holding the CNC programs (HMI PC) - example values : set the address and the account of your PC*)
+	step : USINT := 0;
+	fbDevLink : DevLink;
+	retryTimer : TON;
+	linked : BOOL := FALSE; (*TRUE = the program folder is available*)
+	linkStatus : UINT := 0; (*status of the last failed link, 0 = none*)
+	sysError : UDINT := 0; (*FileIoGetSysError of the last failed link*)
+END_VAR
