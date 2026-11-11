@@ -12,9 +12,9 @@
 | 편 | 주제 | 자료 폴더 | 태그 | 영상 |
 |---|---|---|---|---|
 | ① | 모션 연결 — EtherCAT 3축 | [`episodes/01-motion`](episodes/01-motion/) | `ep01-motion` | 공개 예정 |
-| ② | AI에게 PLC 코드 맡기기 | [`episodes/02-ai-plc`](episodes/02-ai-plc/) | `ep02-ai-plc` | 공개 예정 |
-| ③ | IronHMI로 장비 조작 화면 만들기 | [`episodes/03-ironhmi`](episodes/03-ironhmi/) | `ep03-ironhmi` | 공개 예정 |
-| ④ | 장비 없이 먼저 돌리는 3D 디지털 트윈 | [`episodes/04-twin`](episodes/04-twin/) | `ep04-twin` | 공개 예정 |
+| ② | AI에게 PLC 코드 맡기기 | [`episodes/02-ai-plc`](episodes/02-ai-plc/) | `ep02-ai-plc` | https://youtu.be/RY7eyUygI1M?si=N34yBeyZF17uu403 |
+| ③ | IronHMI로 장비 조작 화면 만들기 | [`episodes/03-ironhmi`](episodes/03-ironhmi/) | `ep03-ironhmi` | https://youtu.be/UX4mMwkrQ6A?si=ry1z7lxD7DrlGfwl |
+| ④ | 장비 없이 먼저 돌리는 3D 디지털 트윈 | [`episodes/04-twin`](episodes/04-twin/) | `ep04-twin` | https://youtu.be/r6UYjjPJ4uk?si=VCNgfIcCeeN782NJ |
 | ⑤ | 이미지 한 장을 레이저 G코드로, IronCAM | [`episodes/05-ironcam`](episodes/05-ironcam/) | `ep05-ironcam` | 공개 예정 |
 
 영상 설명란의 "▶ 자료" 링크는 그 편의 태그(예: `…/tree/ep02-ai-plc/episodes/02-ai-plc`)를 가리킵니다. 태그는 영상을 공개하는 날 만들고, 그 뒤로는 바꾸지 않습니다.
