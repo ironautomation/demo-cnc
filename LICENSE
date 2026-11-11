@@ -19,14 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-Scope: this license covers the PLC Structured Text code and declarations under
-src/PLC (except src/PLC/Logical/Libraries, which are B&R libraries distributed
-under B&R's terms), the Claude Code hooks, rules and skills under .claude/,
-the G-code under gcode/, the material and samples under episodes/, and the
-documentation.
-
-The IronHMI projects under src/HMI and src/HMI_Vertical are covered by LICENSE-HMI.md
-instead.

@@ -64,7 +64,7 @@ episodes/NN-*/                 편마다 영상 장면 ↔ 파일, 표, 예제
 
 ## 라이선스
 
-- PLC ST 코드 · 훅 · 스크립트 · 문서 · 예제: [MIT](LICENSE)
+- [MIT](LICENSE): `src/PLC` 의 ST 코드와 선언 파일(`Logical/Libraries/` 제외), `.claude/` 의 훅 · 규칙 · 스킬, `gcode/`, `episodes/` 의 자료와 예제, 문서
 - IronHMI 프로젝트(`src/HMI`, `src/HMI_Vertical`): [LICENSE-HMI.md](LICENSE-HMI.md)
 - `src/PLC/Logical/Libraries/` 는 B&R 이 배포하는 라이브러리이며 MIT 대상이 아닙니다.
 - 함께 들어 있는 오픈소스 · 제조사 파일: [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)
